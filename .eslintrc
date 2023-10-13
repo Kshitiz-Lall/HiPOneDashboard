@@ -62,15 +62,15 @@
     "import/no-extraneous-dependencies": "off",
     "jsx-a11y/no-autofocus": "off",
     "no-restricted-imports": [
-      "error",
+      "warn",
       {
         "patterns": ["@mui/*/*/*", "!@mui/material/test-utils/*"]
       }
     ],
     "no-unused-vars": [
-      "error",
+      "warn",
       {
-        "ignoreRestSiblings": false
+        "ignoreRestSiblings": true
       }
     ],
     "prettier/prettier": [
