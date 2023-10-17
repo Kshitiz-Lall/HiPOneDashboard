@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
-// material-ui
+import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
@@ -34,6 +33,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
+import { useNavigate } from 'react-router';
+import MyPopup from '../MyPopup';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -43,10 +44,43 @@ const FirebaseLogin = ({ ...others }) => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
-
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  
   const googleHandler = async () => {
     console.error('Login');
   };
+ 
+  const navigate = useNavigate();
+  
+  const handleLogin = async (values) => {
+    try {
+      // You can access the user data from the 'values' object
+      const userData = {
+        username: values.email,
+        password: values.password,
+      };
+      console.log('login data', values.email, values.password);
+      // Now you can use 'userData' to send a POST request
+      const response = await axios.post('https://api-testing-routes.onrender.com/signin', userData);
+      
+      if (response.status === 200) {
+        // Successful login
+        setLoginSuccess(true);
+  
+        // Reset the success state after a delay (e.g., 3 seconds)
+        setTimeout(() => {
+          setLoginSuccess(false);
+        }, 3000);
+        navigate('/');
+      } else {
+        console.error('Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
+
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -59,8 +93,8 @@ const FirebaseLogin = ({ ...others }) => {
 
   return (
     <>
-      <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
+      <Grid container direction="column" justifyContent="center" spacing={0} >
+        <Grid item xs={12} spacing={0}>
           <AnimateButton>
             <Button
               disableElevation
@@ -81,14 +115,14 @@ const FirebaseLogin = ({ ...others }) => {
             </Button>
           </AnimateButton>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} spacing={0}>
           <Box
             sx={{
               alignItems: 'center',
               display: 'flex'
             }}
           >
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+            <Divider sx={{ flexGrow: 1 , mt:-5, mb:-5 }} orientation="horizontal"   />
 
             <Button
               variant="outlined"
@@ -112,7 +146,7 @@ const FirebaseLogin = ({ ...others }) => {
           </Box>
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ mt: -1 ,mb: 0 }}>
             <Typography variant="subtitle1">Sign in with Email address</Typography>
           </Box>
         </Grid>
@@ -120,7 +154,7 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
+          email: 'shivamjain@genzeon.com',
           password: '123456',
           submit: null
         }}
@@ -128,23 +162,9 @@ const FirebaseLogin = ({ ...others }) => {
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            if (scriptedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
-            }
-          } catch (err) {
-            console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
-            }
-          }
-        }}
+        onSubmit={handleLogin}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+        {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
               <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
@@ -213,16 +233,24 @@ const FirebaseLogin = ({ ...others }) => {
               </Box>
             )}
 
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 0 }}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign in
                 </Button>
               </AnimateButton>
             </Box>
+
           </form>
         )}
+
+      
       </Formik>
+      {loginSuccess && (
+        <div className="success-popup">
+          <MyPopup/>
+        </div>
+      )}
     </>
   );
 };

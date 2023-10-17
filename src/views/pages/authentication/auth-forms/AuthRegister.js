@@ -1,13 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
-// material-ui
+import axios from 'axios';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
-  Checkbox,
   Divider,
   FormControl,
   FormControlLabel,
@@ -17,42 +14,59 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  TextField,
+  Stack,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from '@mui/material';
-
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-
-// project imports
-import useScriptRef from 'hooks/useScriptRef';
-import Google from 'assets/images/icons/social-google.svg';
-import AnimateButton from 'ui-component/extended/AnimateButton';
-import { strengthColor, strengthIndicator } from 'utils/password-strength';
-
-// assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import MyPopup from '../MyPopup';
+import { useNavigate } from 'react-router';
 
-// ===========================|| FIREBASE - REGISTER ||=========================== //
-
-const FirebaseRegister = ({ ...others }) => {
+const FirebaseRegister = () => {
   const theme = useTheme();
-  const scriptedRef = useScriptRef();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
-  const [showPassword, setShowPassword] = useState(false);
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const [checked, setChecked] = useState(true);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
-  const [strength, setStrength] = useState(0);
-  const [level, setLevel] = useState();
+  const navigate = useNavigate();
 
-  const googleHandler = async () => {
-    console.error('Register');
+  const handleRegister = async (values) => {
+    try {
+      const userData = {
+        username: values.username,
+        password: values.password,
+        first_name: values.fname,
+        last_name: values.lname,
+        email: values.email,
+        organization: values.organization,
+      };
+      console.log('register data', userData);
+      const response = await axios.post('https://api-testing-routes.onrender.com/signup', JSON.stringify(userData), {
+          headers: {
+                 'Content-Type': 'application/json',
+            },
+          });
+
+      if (response.status === 200) {
+        setRegisterSuccess(true);
+
+        setTimeout(() => {
+          setRegisterSuccess(false);
+        }, 3000);
+        navigate('/login');
+      } else {
+        console.error('Registration failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -61,42 +75,33 @@ const FirebaseRegister = ({ ...others }) => {
     event.preventDefault();
   };
 
-  const changePassword = (value) => {
-    const temp = strengthIndicator(value);
-    setStrength(temp);
-    setLevel(strengthColor(temp));
-  };
-
-  useEffect(() => {
-    changePassword('123456');
-  }, []);
-
   return (
     <>
-      <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
-          <AnimateButton>
-            <Button
-              variant="outlined"
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-              </Box>
-              Sign up with Google
-            </Button>
-          </AnimateButton>
+      <Grid container direction="column" justifyContent="center" spacing={0}>
+        <Grid item xs={12} spacing={0}>
+          <Button
+            disableElevation
+            fullWidth
+            size="large"
+            variant="outlined"
+            sx={{
+              color: 'grey.700',
+              backgroundColor: theme.palette.grey[50],
+              borderColor: theme.palette.grey[100],
+            }}
+          >
+            Sign up with Google
+          </Button>
         </Grid>
-        <Grid item xs={12}>
-          <Box sx={{ alignItems: 'center', display: 'flex' }}>
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
+        <Grid item xs={12} spacing={0}>
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+            }}
+          >
+            <Divider sx={{ flexGrow: 1, mt: -5, mb: -5 }} orientation="horizontal" />
+
             <Button
               variant="outlined"
               sx={{
@@ -107,18 +112,19 @@ const FirebaseRegister = ({ ...others }) => {
                 borderColor: `${theme.palette.grey[100]} !important`,
                 color: `${theme.palette.grey[900]}!important`,
                 fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`
+                borderRadius: `${customization.borderRadius}px`,
               }}
               disableRipple
               disabled
             >
               OR
             </Button>
+
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
           </Box>
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
-          <Box sx={{ mb: 2 }}>
+          <Box sx={{ mt: -1, mb: 0 }}>
             <Typography variant="subtitle1">Sign up with Email address</Typography>
           </Box>
         </Grid>
@@ -126,87 +132,120 @@ const FirebaseRegister = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: '',
+          username: '',
           password: '',
-          submit: null
+          fname: '',
+          lname: '',
+          email: '',
+          organization: '',
+          submit: null,
         }}
         validationSchema={Yup.object().shape({
+          username: Yup.string().required('Username is required'),
+          password: Yup.string().max(255).required('Password is required'),
+          fname: Yup.string().required('First Name is required'),
+          lname: Yup.string().required('Last Name is required'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().max(255).required('Password is required')
+          organization: Yup.string().required('Organization is required'),
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            if (scriptedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
-            }
-          } catch (err) {
-            console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
-            }
-          }
-        }}
+        onSubmit={handleRegister}
       >
-        {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-          <form noValidate onSubmit={handleSubmit} {...others}>
-            <Grid container spacing={matchDownSM ? 0 : 2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="First Name"
-                  margin="normal"
-                  name="fname"
-                  type="text"
-                  defaultValue=""
-                  sx={{ ...theme.typography.customInput }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Last Name"
-                  margin="normal"
-                  name="lname"
-                  type="text"
-                  defaultValue=""
-                  sx={{ ...theme.typography.customInput }}
-                />
-              </Grid>
-            </Grid>
-            <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-register">Email Address / Username</InputLabel>
+        {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+          <form noValidate onSubmit={handleSubmit}>
+            <FormControl fullWidth error={Boolean(touched.fname && errors.fname)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-fname">First Name</InputLabel>
               <OutlinedInput
-                id="outlined-adornment-email-register"
+                id="outlined-adornment-fname"
+                type="text"
+                name="fname"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.fname}
+              />
+              {touched.fname && errors.fname && (
+                <FormHelperText error id="standard-weight-helper-text-fname">
+                  {errors.fname}
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl fullWidth error={Boolean(touched.lname && errors.lname)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-lname">Last Name</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-lname"
+                type="text"
+                name="lname"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.lname}
+              />
+              {touched.lname && errors.lname && (
+                <FormHelperText error id="standard-weight-helper-text-lname">
+                  {errors.lname}
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-email"
                 type="email"
-                value={values.email}
                 name="email"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                inputProps={{}}
+                value={values.email}
               />
               {touched.email && errors.email && (
-                <FormHelperText error id="standard-weight-helper-text--register">
+                <FormHelperText error id="standard-weight-helper-text-email">
                   {errors.email}
                 </FormHelperText>
               )}
             </FormControl>
 
-            <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-password-register">Password</InputLabel>
+            <FormControl fullWidth error={Boolean(touched.organization && errors.organization)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-organization">Organization</InputLabel>
               <OutlinedInput
-                id="outlined-adornment-password-register"
-                type={showPassword ? 'text' : 'password'}
-                value={values.password}
-                name="password"
-                label="Password"
+                id="outlined-adornment-organization"
+                type="text"
+                name="organization"
                 onBlur={handleBlur}
-                onChange={(e) => {
-                  handleChange(e);
-                  changePassword(e.target.value);
-                }}
+                onChange={handleChange}
+                value={values.organization}
+              />
+              {touched.organization && errors.organization && (
+                <FormHelperText error id="standard-weight-helper-text-organization">
+                  {errors.organization}
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl fullWidth error={Boolean(touched.username && errors.username)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-username"
+                type="text"
+                name="username"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.username}
+              />
+              {touched.username && errors.username && (
+                <FormHelperText error id="standard-weight-helper-text-username">
+                  {errors.username}
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl fullWidth error={Boolean(touched.password && errors.password)} sx={{ ...theme.typography.customInput }}>
+              <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.password}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -214,71 +253,37 @@ const FirebaseRegister = ({ ...others }) => {
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
-                      size="large"
                     >
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 }
-                inputProps={{}}
               />
               {touched.password && errors.password && (
-                <FormHelperText error id="standard-weight-helper-text-password-register">
+                <FormHelperText error id="standard-weight-helper-text-password">
                   {errors.password}
                 </FormHelperText>
               )}
             </FormControl>
 
-            {strength !== 0 && (
-              <FormControl fullWidth>
-                <Box sx={{ mb: 2 }}>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item>
-                      <Box style={{ backgroundColor: level?.color }} sx={{ width: 85, height: 8, borderRadius: '7px' }} />
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="subtitle1" fontSize="0.75rem">
-                        {level?.label}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </FormControl>
-            )}
-
-            <Grid container alignItems="center" justifyContent="space-between">
-              <Grid item>
-                <FormControlLabel
-                  control={
-                    <Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />
-                  }
-                  label={
-                    <Typography variant="subtitle1">
-                      Agree with &nbsp;
-                      <Typography variant="subtitle1" component={Link} to="#">
-                        Terms & Condition.
-                      </Typography>
-                    </Typography>
-                  }
-                />
-              </Grid>
-            </Grid>
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
               </Box>
             )}
 
-            <Box sx={{ mt: 2 }}>
-              <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
-                  Sign up
-                </Button>
-              </AnimateButton>
-            </Box>
+            <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
+              Sign up
+            </Button>
           </form>
         )}
       </Formik>
+
+      {registerSuccess && (
+        <div className="success-popup">
+          <MyPopup />
+        </div>
+      )}
     </>
   );
 };
