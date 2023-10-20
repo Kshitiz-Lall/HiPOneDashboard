@@ -1,42 +1,23 @@
-// assets
-import { IconKey } from '@tabler/icons';
+import { IconBrandChrome, IconHelp } from '@tabler/icons';
 
 // constant
-const icons = {
-  IconKey
-};
+const icons = { IconBrandChrome, IconHelp };
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
 const pages = {
   id: 'pages',
-  title: 'Pages',
-  caption: 'Pages Caption',
+  title: "Pages",
   type: 'group',
   children: [
     {
-      id: 'authentication',
-      title: 'Authentication',
-      type: 'collapse',
-      icon: icons.IconKey,
-
-      children: [
-        {
-          id: 'login3',
-          title: 'Login',
-          type: 'item',
-          url: '/login',
-          target: true
-        },
-        {
-          id: 'register3',
-          title: 'Register',
-          type: 'item',
-          url: '/register',
-          target: true
-        }
-      ]
-    }
+      id: 'user-pages',
+      title: 'User Pages',
+      type: 'item',
+      url: '',
+      icon: icons.IconBrandChrome,
+      breadcrumbs: false
+    },
   ]
 };
 

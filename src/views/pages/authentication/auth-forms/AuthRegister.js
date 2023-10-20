@@ -24,6 +24,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MyPopup from '../MyPopup';
 import { useNavigate } from 'react-router';
+import "./AuthLogin.css"
 
 const FirebaseRegister = () => {
   const theme = useTheme();
@@ -46,10 +47,10 @@ const FirebaseRegister = () => {
       };
       console.log('register data', userData);
       const response = await axios.post('https://api-testing-routes.onrender.com/signup', JSON.stringify(userData), {
-          headers: {
-                 'Content-Type': 'application/json',
-            },
-          });
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (response.status === 200) {
         setRegisterSuccess(true);

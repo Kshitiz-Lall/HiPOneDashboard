@@ -11,6 +11,12 @@ import ProfileSection from './ProfileSection';
 
 // assets
 import { IconMenu2 } from '@tabler/icons';
+import WelcomeMsg from './WelcomeMsg';
+import Dropdown from './Dropdown';
+import Datepicker from './Datepicker';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import SearchIcon from '@mui/icons-material/Search';
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -32,6 +38,7 @@ const Header = ({ handleLeftDrawerToggle }) => {
         <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 1 }}>
           <LogoSection />
         </Box>
+
         <ButtonBase sx={{ borderRadius: '12px', overflow: 'hidden' }}>
           <Avatar
             variant="rounded"
@@ -39,10 +46,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
               ...theme.typography.commonAvatar,
               ...theme.typography.mediumAvatar,
               transition: 'all .2s ease-in-out',
-              background: theme.palette.secondary.light,
-              color: theme.palette.secondary.dark,
+              background: "#00cca5",
+              color: theme.palette.secondary.light,
               '&:hover': {
-                background: theme.palette.secondary.dark,
+                background: "#80e8cc",
                 color: theme.palette.secondary.light
               }
             }}
@@ -53,12 +60,24 @@ const Header = ({ handleLeftDrawerToggle }) => {
           </Avatar>
         </ButtonBase>
       </Box>
-    
-      <Box sx={{ flexGrow: 1 }} />
-      <Box sx={{ flexGrow: 1 }} />
-
-      {/* notification & profile */}
-    
+      <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 3 }}>
+        <WelcomeMsg />
+      </Box>
+      <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
+        <Dropdown />
+      </Box>
+      <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
+        <Datepicker />
+      </Box>
+      <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
+        <SearchIcon />
+      </Box>
+      <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
+        <MailOutlineIcon />
+      </Box>
+      <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
+        <NotificationsNoneIcon />
+      </Box>
       <ProfileSection />
     </>
   );

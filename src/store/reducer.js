@@ -1,12 +1,10 @@
 import { combineReducers } from 'redux';
-
-// reducer import
 import customizationReducer from './customizationReducer';
+import automationReducer from './postman'; // Adjust the path accordingly
 
-// ==============================|| COMBINE REDUCER ||============================== //
-
-const reducer = combineReducers({
-  customization: customizationReducer
+const rootReducer = combineReducers({
+  customization: customizationReducer,
+  automation: automationReducer,
 });
 
-export default reducer;
+export default rootReducer;

@@ -35,6 +35,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Google from 'assets/images/icons/social-google.svg';
 import { useNavigate } from 'react-router';
 import MyPopup from '../MyPopup';
+import "./AuthLogin.css"
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -45,13 +46,13 @@ const FirebaseLogin = ({ ...others }) => {
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
   const [loginSuccess, setLoginSuccess] = useState(false);
-  
+
   const googleHandler = async () => {
     console.error('Login');
   };
- 
+
   const navigate = useNavigate();
-  
+
   const handleLogin = async (values) => {
     try {
       // You can access the user data from the 'values' object
@@ -62,16 +63,16 @@ const FirebaseLogin = ({ ...others }) => {
       console.log('login data', values.email, values.password);
       // Now you can use 'userData' to send a POST request
       const response = await axios.post('https://api-testing-routes.onrender.com/signin', userData);
-      
+
       if (response.status === 200) {
         // Successful login
         setLoginSuccess(true);
-  
+
         // Reset the success state after a delay (e.g., 3 seconds)
         setTimeout(() => {
           setLoginSuccess(false);
         }, 3000);
-        navigate('/');
+        navigate('/dashboard');
       } else {
         console.error('Login failed');
       }
@@ -79,7 +80,7 @@ const FirebaseLogin = ({ ...others }) => {
       console.error('Error:', error);
     }
   };
-  
+
 
 
   const [showPassword, setShowPassword] = useState(false);
@@ -122,7 +123,7 @@ const FirebaseLogin = ({ ...others }) => {
               display: 'flex'
             }}
           >
-            <Divider sx={{ flexGrow: 1 , mt:-5, mb:-5 }} orientation="horizontal"   />
+            <Divider sx={{ flexGrow: 1, mt: -5, mb: -5 }} orientation="horizontal" />
 
             <Button
               variant="outlined"
@@ -146,7 +147,7 @@ const FirebaseLogin = ({ ...others }) => {
           </Box>
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
-          <Box sx={{ mt: -1 ,mb: 0 }}>
+          <Box sx={{ mt: -1, mb: 0 }}>
             <Typography variant="subtitle1">Sign in with Email address</Typography>
           </Box>
         </Grid>
@@ -223,7 +224,7 @@ const FirebaseLogin = ({ ...others }) => {
                 }
                 label="Remember me"
               />
-              <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+              <Typography variant="subtitle1" color="rgba(0, 143, 251, 0.85);" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
                 Forgot Password?
               </Typography>
             </Stack>
@@ -244,11 +245,11 @@ const FirebaseLogin = ({ ...others }) => {
           </form>
         )}
 
-      
+
       </Formik>
       {loginSuccess && (
         <div className="success-popup">
-          <MyPopup/>
+          <MyPopup />
         </div>
       )}
     </>

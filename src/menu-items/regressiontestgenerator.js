@@ -8,11 +8,12 @@ const icons = { IconBrandChrome, IconHelp };
 
 const other = {
   id: 'sample-docs-roadmap',
+  title: "Regression Test Generator",
   type: 'group',
   children: [
     {
-      id: 'sample-page',
-      title: 'Sample Page',
+      id: 'regression-test-generator',
+      title: 'Test Cases',
       type: 'item',
       url: '/sample-page',
       icon: icons.IconBrandChrome,

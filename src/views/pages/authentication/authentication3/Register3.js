@@ -21,7 +21,7 @@ const Register = () => {
 
   return (
     <AuthWrapper1>
-      <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh' , mt:-1}}>
+      <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh', mt: -1 }}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
             <Grid item sx={{ m: { xs: 0, sm: 0 }, mb: 0 }}>
@@ -33,10 +33,10 @@ const Register = () => {
                     </Link>
                   </Grid> */}
                   <Grid item xs={12}>
-                    <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center" sx={{mt:-2, mb:0}}>
+                    <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center" sx={{ mt: -2, mb: 0 }}>
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
-                          <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                          <Typography color="#00cca5" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                             Sign up
                           </Typography>
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
@@ -46,15 +46,15 @@ const Register = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} sx={{mt:-1, mb:-2}}> 
+                  <Grid item xs={12} sx={{ mt: -1, mb: -2 }}>
                     <AuthRegister />
                   </Grid>
-                  <Grid item xs={12} sx={{mt:0, mb:0}}>
-                    <Divider  />
+                  <Grid item xs={12} sx={{ mt: 0, mb: 0 }}>
+                    <Divider />
                   </Grid>
                   <Grid item xs={12}>
-                    <Grid item container direction="column" alignItems="center" xs={12} sx={{mt:-1, mb:-1}}>
-                      <Typography component={Link} to="/login" variant="subtitle1" sx={{ textDecoration: 'none' , mt:0, mb:0}}>
+                    <Grid item container direction="column" alignItems="center" xs={12} sx={{ mt: -1, mb: -1 }}>
+                      <Typography component={Link} to="/login" variant="subtitle1" sx={{ textDecoration: 'none', mt: 0, mb: 0 }}>
                         Already have an account?
                       </Typography>
                     </Grid>
@@ -64,9 +64,7 @@ const Register = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} sx={{ m: 1, mt: 0 }}>
-          <AuthFooter />
-        </Grid>
+
       </Grid>
     </AuthWrapper1>
   );
