@@ -21,18 +21,18 @@ import Register from 'views/pages/authentication/authentication3/Register3';
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
-  const isAuth =true;
+  const isAuth = true;
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes(customization)}>
         <Routes>
-        <Route element={!isAuth ? <Outlet /> : <Navigate to={'/'} />}>
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register/>} />
-        </Route>
-        <Route element={<MainLayout/>}>
-              <Route path='/' element={<Dashboard/> } />
-        </Route>
+          <Route element={!isAuth ? <Outlet /> : <Navigate to={'/'} />}>
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+          </Route>
+          <Route element={<MainLayout />}>
+            <Route path='/dashboard/default' element={<Dashboard />} />
+          </Route>
         </Routes>
       </ThemeProvider>
     </StyledEngineProvider>

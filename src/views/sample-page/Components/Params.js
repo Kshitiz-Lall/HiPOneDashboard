@@ -6,7 +6,7 @@ import { setParamsdata } from 'store/postman';
 import { node } from 'prop-types';
 import { borderColor } from '@mui/system';
 
-const KeyValueTable = ({ setUrl, url,height }) => {
+const KeyValueTable = ({ setUrl, url, height }) => {
   const paramsData = useSelector((state) => state.automation.paramsdata);
   const [data, setData] = useState(JSON.parse(JSON.stringify(paramsData)));
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const KeyValueTable = ({ setUrl, url,height }) => {
 
     // Update URL with the new appendedata
     let oldurl;
-    console.log(url)
+
     if (url.includes('?')) {
       oldurl = url.split('?')[0];
     } else {
@@ -55,7 +55,7 @@ const KeyValueTable = ({ setUrl, url,height }) => {
     newData[index] = { ...newData[index], key, value };
     setData(newData);
     let oldurl;
-    console.log(url)
+
     if (url.includes('?')) {
       oldurl = url.split('?')[0];
 
@@ -113,9 +113,9 @@ const KeyValueTable = ({ setUrl, url,height }) => {
     }
 
   }, [data, appendedata, setUrl]);
-  
+
   return (
-    <div style={{height:height , overflow:"scroll"}}>
+    <div style={{ height: height, overflow: "scroll" }}>
       <table className='key_value_table'>
         <thead>
           <tr>

@@ -16,7 +16,7 @@ import {
   OutlinedInput,
   Stack,
   Typography,
-  useMediaQuery,
+  useMediaQuery
 } from '@mui/material';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -24,7 +24,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MyPopup from '../MyPopup';
 import { useNavigate } from 'react-router';
-import "./AuthLogin.css"
+import './AuthLogin.css';
+import { toast, ToastContainer } from "react-toastify";
 
 const FirebaseRegister = () => {
   const theme = useTheme();
@@ -43,17 +44,22 @@ const FirebaseRegister = () => {
         first_name: values.fname,
         last_name: values.lname,
         email: values.email,
-        organization: values.organization,
+        organization: values.organization
       };
-      console.log('register data', userData);
-      const response = await axios.post('https://api-testing-routes.onrender.com/signup', JSON.stringify(userData), {
+
+      const response = await axios.post('http://40.90.224.238:8088/signup', JSON.stringify(userData), {
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (response.status === 200) {
         setRegisterSuccess(true);
+        toast.success("User created successfully.", {
+          position: toast.POSITION.TOP_RIGHT,
+          hideProgressBar: true,
+          theme: "colored",
+        });
 
         setTimeout(() => {
           setRegisterSuccess(false);
@@ -61,9 +67,19 @@ const FirebaseRegister = () => {
         navigate('/login');
       } else {
         console.error('Registration failed');
+        toast.error("Failed to create new user.", {
+          position: toast.POSITION.TOP_RIGHT,
+          hideProgressBar: true,
+          theme: "colored",
+        });
       }
     } catch (error) {
       console.error('Error:', error);
+      toast.error("Failed to create new user.", {
+        position: toast.POSITION.TOP_RIGHT,
+        hideProgressBar: true,
+        theme: "colored",
+      });
     }
   };
 
@@ -78,6 +94,7 @@ const FirebaseRegister = () => {
 
   return (
     <>
+      <ToastContainer></ToastContainer>
       <Grid container direction="column" justifyContent="center" spacing={0}>
         <Grid item xs={12} spacing={0}>
           <Button
@@ -88,7 +105,7 @@ const FirebaseRegister = () => {
             sx={{
               color: 'grey.700',
               backgroundColor: theme.palette.grey[50],
-              borderColor: theme.palette.grey[100],
+              borderColor: theme.palette.grey[100]
             }}
           >
             Sign up with Google
@@ -98,7 +115,7 @@ const FirebaseRegister = () => {
           <Box
             sx={{
               alignItems: 'center',
-              display: 'flex',
+              display: 'flex'
             }}
           >
             <Divider sx={{ flexGrow: 1, mt: -5, mb: -5 }} orientation="horizontal" />
@@ -113,7 +130,7 @@ const FirebaseRegister = () => {
                 borderColor: `${theme.palette.grey[100]} !important`,
                 color: `${theme.palette.grey[900]}!important`,
                 fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`,
+                borderRadius: `${customization.borderRadius}px`
               }}
               disableRipple
               disabled
@@ -139,7 +156,7 @@ const FirebaseRegister = () => {
           lname: '',
           email: '',
           organization: '',
-          submit: null,
+          submit: null
         }}
         validationSchema={Yup.object().shape({
           username: Yup.string().required('Username is required'),
@@ -147,7 +164,7 @@ const FirebaseRegister = () => {
           fname: Yup.string().required('First Name is required'),
           lname: Yup.string().required('Last Name is required'),
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          organization: Yup.string().required('Organization is required'),
+          organization: Yup.string().required('Organization is required')
         })}
         onSubmit={handleRegister}
       >
@@ -273,7 +290,7 @@ const FirebaseRegister = () => {
               </Box>
             )}
 
-            <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
+            <Button className='sign-in-button' disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
               Sign up
             </Button>
           </form>

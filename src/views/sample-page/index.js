@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setGenraetedTest } from 'store/postman';
 import { useEffect } from 'react';
 import TestResults from './Components/TestResults';
+import ReactLoading from "react-loading";
 
 const Theme = createTheme({
   palette: {
@@ -27,7 +28,8 @@ const Theme = createTheme({
     }
   }
 });
-const baseUrl = 'http://127.0.0.1:5000';
+const baseUrl = 'http://40.90.224.238:8088';
+const user_id = localStorage.getItem("user_id")
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -62,6 +64,10 @@ function a11yProps1(index) {
 }
 
 const SamplePage = () => {
+
+  const [displaySummary, setDisplaySummary] = useState(false);
+  const [loadingOverlay, setLoadingOverlay] = useState(false);
+  const [enableRunTest, setEnableRunTest] = useState(false)
   const [url, setUrl] = useState('');
   const [value, setValue] = useState(0); // Add this line to initialize the 'value' state
   const [value1, setValue1] = useState(0);
@@ -77,7 +83,11 @@ const SamplePage = () => {
   const [testResults, seTestResults] = useState(null);
   const [testResultsLists, seTestResultsLists] = useState({ errors: [], failed_tests: [], success_tests: [] });
   const [height, setHeight] = useState('38vh');
-  const [responseBody, setResponseBody] = useState('Response');
+  const [responseBody, setResponseBody] = useState("");
+
+  const [validUrl, setValidUrl] = useState(true);
+
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -90,9 +100,9 @@ const SamplePage = () => {
     } else {
       content_type = bodydata.raw.type;
       request_body = bodydata.raw.data;
-      console.log(bodydata.raw.data);
+
     }
-    console.log(content_type);
+
     let fromData = bodydata.fromData;
     let selectedFormData = fromData.filter((item) => item.selected);
     let selectedHeadersdata = headerData.filter((item) => item.selected);
@@ -105,8 +115,10 @@ const SamplePage = () => {
     let form_types = selectedFormData.map((item) => item.type);
     let form_values = selectedFormData.map((item) => (item.type === 'text' ? item.value : item.file));
     let resp;
+    setLoadingOverlay(true);
     try {
       resp = await axios.post(`${baseUrl}/explore_api_and_generate_test`, {
+        user_id: user_id,
         api_url: url,
         http_method: requestType,
         content_type: 'json',
@@ -120,19 +132,22 @@ const SamplePage = () => {
         Authorization: authorization,
         request_body
       });
-      console.log(resp);
+
       dispatch(setGenraetedTest(resp.data.test_code));
       setResponseBody(resp.data.code_content);
-      seTestResultsLists(resp.data.results);
+      seTestResultsLists({ ...resp.data.results });
+      setEnableRunTest(true)
+      setLoadingOverlay(false);
     } catch (e) {
       console.log(e);
     }
-    console.log(testResultsLists);
+
   };
   const runTest = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/run_test`);
+      const response = await axios.post(`${baseUrl}/run_test`, { user_id });
       seTestResults(response.data);
+      setDisplaySummary(true)
     } catch (error) {
       console.error('Error making the request:', error);
       // Handle error as needed
@@ -142,7 +157,12 @@ const SamplePage = () => {
     setRequestType(event.target.value);
   };
   const handleUrlChange = (event) => {
-    setUrl(event.target.value);
+    const newUrl = event.target.value;
+    // Regular expression for URL validation
+    const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+
+    setUrl(newUrl); // Update the input field
+    setValidUrl(urlRegex.test(newUrl)); // Check if the new URL is valid
   };
   const handleChange1 = (event, newValue) => {
     setValue1(newValue);
@@ -221,21 +241,24 @@ const SamplePage = () => {
             borderLeft: 'none',
             outline: 'none',
             borderRadius: '0px 5px 5px 0px',
-            paddingLeft: '15px', // Adjust the left padding as needed
-            border: '1px solid #787878'
+            paddingLeft: '15px',
+            border: validUrl ? '1px solid #787878' : '1px solid red', // Change the border color based on URL validity
           }}
         />
+        {validUrl ? null : (
+          <div style={{ color: 'red', marginLeft: '10px' }}>Invalid URL</div>
+        )}
 
         <Button
           sx={{
             width: '10%',
             backgroundColor: '#00cca5',
             height: '6vh',
-            borderRadius: '4px',
+            borderRadius: '5px',
             boxSizing: 'border-box',
             marginLeft: '2vh',
             '&:hover': {
-              backgroundColor: '#008e72' // Change the color on hover
+              backgroundColor: '#80e8cc' // Change the color on hover
             }
           }}
           variant="contained"
@@ -297,11 +320,15 @@ const SamplePage = () => {
               <Body height={height}></Body>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={4}>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <button onClick={runTest} className="genrate_button">
-                  Run Test
-                </button>
-              </div>
+              {
+                enableRunTest &&
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <button onClick={runTest} className="genrate_button">
+                    Run Test
+                  </button>
+                </div>
+              }
+
 
               <textarea
                 value={test_code}
@@ -314,6 +341,7 @@ const SamplePage = () => {
       </Resizable>
       <Divider sx={{ marginLeft: '0.7%', width: '97%' }}></Divider>
       <Paper sx={{ position: 'relative' }}>
+
         <ThemeProvider theme={Theme}>
           <Box sx={{ marginLeft: '0.7%', width: '97%', height: '100%', position: 'relative', bottom: '0' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -321,27 +349,38 @@ const SamplePage = () => {
                 <Tab sx={{ padding: '2vh', fontSize: '12px' }} label="Body" {...a11yProps1(0)} />
                 <Tab sx={{ padding: '2vh', fontSize: '12px' }} label="Header" {...a11yProps1(1)} />
                 <Tab sx={{ padding: '2vh', fontSize: '12px' }} label="Test Results" {...a11yProps1(2)} />
-                <Tab sx={{ padding: '2vh', fontSize: '12px' }} label="Test Summery" {...a11yProps1(3)} />
+                <Tab sx={{ padding: '2vh', fontSize: '12px' }} label="Test Summary" {...a11yProps1(3)} />
               </Tabs>
             </Box>
+            {loadingOverlay && (
+              <div className="loading-overlay" style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingTop: "20px" }}>
+                <ReactLoading
+                  type={"spin"}
+                  color={"#00cca5"}
+                  height={"5%"}
+                  width={"5%"}
+                />
+              </div>
+            )}
             <CustomTabPanel value={value1} index={0}>
               <p style={{ whiteSpace: 'pre-wrap' }}>{responseBody}</p>
             </CustomTabPanel>
             <CustomTabPanel value={value1} index={1}>
-              Item Two
+              No Data
             </CustomTabPanel>
             <CustomTabPanel value={value1} index={2}>
               <TestResults testResultsLists={testResultsLists}></TestResults>
             </CustomTabPanel>
             <CustomTabPanel value={value1} index={3}>
-              <button
+              {displaySummary && <button
                 onClick={() => {
                   openInNewWindow(testResults);
                 }}
                 className="genrate_button"
               >
-                Display summery
-              </button>
+                Display Summary
+              </button>}
+
             </CustomTabPanel>
           </Box>
         </ThemeProvider>

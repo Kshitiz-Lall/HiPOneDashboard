@@ -4,7 +4,7 @@ import { setAuthToken } from "store/postman";
 
 export function Authorization() {
   const authToken = useSelector((state) => state.automation.authToken);
-  console.log(authToken);
+
   const [token, setToken] = useState(authToken);
   const dispatch = useDispatch();
 

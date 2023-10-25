@@ -1,41 +1,31 @@
-import React, { useState, useEffect } from "react";
-import ReactApexChart from "react-apexcharts";
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import ReactApexChart from 'react-apexcharts';
 
 const TotalGrowthBarChart = () => {
+  const user_id = localStorage.getItem("user_id")
+
   const [chartData, setChartData] = useState({
     options: {
       plotOptions: {
         bar: {
           dataLabels: {
-            position: "top" // top, center, bottom
+            position: 'top' // top, center, bottom
           }
-        },
+        }
       },
       dataLabels: {
         enabled: true,
-        formatter: (val) => Number(val).toLocaleString() + "$",
+        formatter: (val) => Number(val).toLocaleString(),
         offsetY: -20,
         style: {
-          fontSize: "12px",
-          colors: ["#304758"]
+          fontSize: '12px',
+          colors: ['#304758']
         }
       },
       xaxis: {
-        categories: [
-          "JAN",
-          "FEB",
-          "MAR",
-          "APR",
-          "MAY",
-          "JUN",
-          "JUL",
-          "AUG",
-          "SEP",
-          "OCT",
-          "NOV",
-          "DEC"
-        ],
-        position: "bottom",
+        categories: [],
+        position: 'bottom',
         labels: {
           offsetY: 0
         },
@@ -47,10 +37,10 @@ const TotalGrowthBarChart = () => {
         },
         crosshairs_: {
           fill: {
-            type: "gradient",
+            type: 'gradient',
             gradient: {
-              colorFrom: "#D8E3F0",
-              colorTo: "#BED1E6",
+              colorFrom: '#D8E3F0',
+              colorTo: '#BED1E6',
               stops: [0, 100],
               opacityFrom: 0.4,
               opacityTo: 0.5
@@ -64,8 +54,8 @@ const TotalGrowthBarChart = () => {
       },
       fill: {
         gradient: {
-          shade: "light",
-          type: "horizontal",
+          shade: 'light',
+          type: 'horizontal',
           shadeIntensity: 0.25,
           gradientToColors: undefined,
           inverseColors: true,
@@ -83,58 +73,146 @@ const TotalGrowthBarChart = () => {
         },
         labels: {
           show: false,
-          formatter: (val) => Number(val).toLocaleString() + "$"
+          formatter: (val) => Number(val).toLocaleString()
         }
       },
       title: {
-        text: "Market Overview",
+        text: '',
         floating: true,
         offsetY: 0,
-        align: "left",
+        align: 'left',
         style: {
-          color: "#444"
+          color: '#444'
         }
       },
       chart: {
         animations: {
           enabled: false
         },
-        background: "#fff",
+        background: '#fff'
       }
     },
     series: [
       {
-        name: "Chiffre d'affaires",
-        data: [8976, 12987, 9853, 10986, 3571, 8976, 12987, 9853, 10986, 3571, 8976, 12987]
+        data: []
+      },
+      {
+        data: []
       }
     ]
   });
 
   useEffect(() => {
-    // Simulate data update after 4 seconds
-    setTimeout(() => {
+    async function fetchData() {
+      const response1 = await axios.post('http://40.90.224.238:8088/dashboardchart', { user_id });
+      const Negative_Test_Cases_List = response1.data.map((d) => d.Negative_Test_Cases);
+      const Passes_Test_Cases = response1.data.map((d) => d.Passes_Test_Cases);
+      const dates = response1.data.map((d) => d.Day);
+
       setChartData({
-        ...chartData,
+        options: {
+          plotOptions: {
+            bar: {
+              dataLabels: {
+                position: 'top' // top, center, bottom
+              }
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            formatter: (val) => Number(val).toLocaleString(),
+            offsetY: -20,
+            style: {
+              fontSize: '12px',
+              colors: ['#304758']
+            }
+          },
+          xaxis: {
+            categories: [...dates],
+            position: 'bottom',
+            labels: {
+              offsetY: 0
+            },
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false
+            },
+            crosshairs_: {
+              fill: {
+                type: 'gradient',
+                gradient: {
+                  colorFrom: '#D8E3F0',
+                  colorTo: '#BED1E6',
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5
+                }
+              }
+            },
+            tooltip: {
+              enabled: false,
+              offsetY: -35
+            }
+          },
+          fill: {
+            gradient: {
+              shade: 'light',
+              type: 'horizontal',
+              shadeIntensity: 0.25,
+              gradientToColors: undefined,
+              inverseColors: true,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [50, 0, 100, 100]
+            }
+          },
+          yaxis: {
+            axisBorder: {
+              show: false
+            },
+            axisTicks: {
+              show: false
+            },
+            labels: {
+              show: false,
+              formatter: (val) => Number(val).toLocaleString()
+            }
+          },
+          title: {
+            text: 'Performance Test Chart',
+            floating: true,
+            offsetY: 0,
+            align: 'left',
+            style: {
+              color: '#444'
+            }
+          },
+          chart: {
+            animations: {
+              enabled: false
+            },
+            background: '#fff'
+          }
+        },
         series: [
           {
-            name: "Chiffre d'affaires",
-            data: [8976, 12987, 9853, 10986, 3571, 8976, 12987, 9853, 10986, 3571, 8976, 12987]
-          }
+            name: 'Number of Failed Test Cases',
+            data: [...Negative_Test_Cases_List]
+          },
+          { name: 'Number of Passed Test Cases', data: [...Passes_Test_Cases] }
         ]
       });
-    }, 4000);
+    }
+    fetchData();
   }, []); // Empty dependency array to run the effect only once
 
   return (
     <div id="chart">
-      <ReactApexChart
-        options={chartData.options}
-        series={chartData.series}
-        type="bar"
-        height="300"
-      />
+      <ReactApexChart options={chartData.options} series={chartData.series} type="bar" height="300" />
     </div>
   );
 };
 
-export default TotalGrowthBarChart
+export default TotalGrowthBarChart;

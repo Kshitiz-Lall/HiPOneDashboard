@@ -14,29 +14,24 @@ import Box from '@mui/material/Box';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import PrintIcon from '@mui/icons-material/Print';
 import ShareIcon from '@mui/icons-material/Share';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 
 const Theme = createTheme({
   palette: {
     primary: {
-      main: "#00cca5",
-    },
-  },
+      main: '#00cca5'
+    }
+  }
 });
 
-let visitsData = [{ "total_visitors": "26.80" }, { "visits_per_day": "1065" }]
+let visitsData = [{ total_visitors: '26.80' }];
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
+    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
       {value === index && (
         <Box sx={{ p: 0 }}>
           <Typography>{children}</Typography>
@@ -49,18 +44,27 @@ function CustomTabPanel(props) {
 CustomTabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired
 };
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
   };
 }
 
 const Dashboard = () => {
   const [value, setValue] = React.useState(0);
+  const [data, setData] = useState([]);
+  const [dashboardChart, setDashboardChart] = useState({
+    Average_API_Response_Times: [],
+    Average_Code_Generation_Times: [],
+    dates: []
+  });
+
+  const user_id = localStorage.getItem("user_id")
+  let total_test_cases_generated;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -73,20 +77,27 @@ const Dashboard = () => {
   }, []);
 
 
-  let data = [
-    { "title": "Positive Test Case", "stat": "32.53%", "fluctuation": "+0.5" },
-    { "title": "Negative Test Case", "stat": "32.53%", "fluctuation": "+0.5" },
-    { "title": "Total API Tested", "stat": "32.53%", "fluctuation": "+0.5" },
-    { "title": "Avg. Response Time", "stat": "32.53%", "fluctuation": "+0.5" },
-    { "title": "Avg. Code Execution", "stat": "32.53%", "fluctuation": "+0.5" },
-  ];
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.post('http://40.90.224.238:8088/dashboard', { user_id });
+
+
+      total_test_cases_generated = response.data.Negative_Test_Cases + response.data.Passes_Test_Cases
+      localStorage.setItem("test_cases", total_test_cases_generated)
+      const dataList = Object.entries(response.data).map(([key, value]) => ({ key, value }));
+      setTimeout(() => {
+        setData(dataList);
+      }, 10);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
-
         <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', display: "flex", flexDirection: "row" }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', flexDirection: 'row' }}>
             <ThemeProvider theme={Theme}>
               <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                 <Tab label="Overview" {...a11yProps(0)} />
@@ -96,22 +107,30 @@ const Dashboard = () => {
               </Tabs>
             </ThemeProvider>
             <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-              <Button variant="outlined" sx={{ marginRight: "20px", width: "20px", height: "20px", color: '#697586', border: "0.5px solid #00cca5" }}>
+              <Button
+                variant="outlined"
+                sx={{ marginRight: '20px', width: '20px', height: '20px', color: '#697586', border: '0.5px solid #00cca5' }}
+              >
                 <ShareIcon fontSize="12px" />
-                &nbsp;Share</Button>
-              <Button variant="outlined" sx={{ marginRight: "20px", width: "20px", height: "20px", color: '#697586', border: "0.5px solid #00cca5" }}>
+                &nbsp;Share
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{ marginRight: '20px', width: '20px', height: '20px', color: '#697586', border: '0.5px solid #00cca5' }}
+              >
                 <PrintIcon fontSize="12px" />
-                &nbsp;Print</Button>
+                &nbsp;Print
+              </Button>
               <Button
                 variant="contained"
                 sx={{
-                  width: "20px",
-                  height: "20px",
-                  backgroundColor: "#00cca5",
+                  width: '20px',
+                  height: '20px',
+                  backgroundColor: '#00cca5',
                   color: 'white',
                   '&:hover': {
-                    backgroundColor: "#80e8cc",
-                  },
+                    backgroundColor: '#80e8cc'
+                  }
                 }}
               >
                 <SystemUpdateAltIcon fontSize="12px" />
@@ -125,8 +144,8 @@ const Dashboard = () => {
               <Grid container spacing={gridSpacing}>
                 <Grid item xs={12}>
                   <Grid container spacing={gridSpacing}>
-                    {data.map((eachData, index) => (
-                      <Grid item key={index} lg={2} md={4} sm={6} xs={12} sx={{ marginRight: "25px" }}>
+                    {data.slice().reverse().map((eachData, index) => (
+                      <Grid item key={eachData.id} lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
                         <EarningCard isLoading={isLoading} data={eachData} />
                       </Grid>
                     ))}
@@ -137,25 +156,21 @@ const Dashboard = () => {
 
             <Grid item xs={12}>
               <Grid container spacing={gridSpacing}>
-                <Grid item xs={12} md={8}>
-                  <LineChart />
+                <Grid item xs={12} md={10}>
+                  <LineChart dashBoardChart={dashboardChart} />
                 </Grid>
                 <Grid item xs={12} md={2}>
-                  <RadialBarChart visitsData={visitsData[0]} />
-                </Grid>
-                <Grid item xs={12} md={2}>
-                  <RadialBarChart visitsData={visitsData[1]} />
+                  <RadialBarChart />
                 </Grid>
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
               <Grid container spacing={gridSpacing}>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={10}>
                   <TotalGrowthBarChart isLoading={isLoading} />
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  {/* <PopularCard isLoading={isLoading} /> */}
+                <Grid item xs={12} md={2}>
                 </Grid>
               </Grid>
             </Grid>
@@ -169,11 +184,8 @@ const Dashboard = () => {
             Item Three
           </CustomTabPanel>
         </Box>
-
       </Grid>
-
-
-    </Grid >
+    </Grid>
   );
 };
 

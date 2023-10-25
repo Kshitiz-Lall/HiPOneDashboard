@@ -35,7 +35,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Google from 'assets/images/icons/social-google.svg';
 import { useNavigate } from 'react-router';
 import MyPopup from '../MyPopup';
-import "./AuthLogin.css"
+import './AuthLogin.css';
+import { toast, ToastContainer } from "react-toastify";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -58,30 +59,48 @@ const FirebaseLogin = ({ ...others }) => {
       // You can access the user data from the 'values' object
       const userData = {
         username: values.email,
-        password: values.password,
+        password: values.password
       };
-      console.log('login data', values.email, values.password);
+
       // Now you can use 'userData' to send a POST request
-      const response = await axios.post('https://api-testing-routes.onrender.com/signin', userData);
+      const response = await axios.post('http://40.90.224.238:8088/signin', userData);
 
       if (response.status === 200) {
         // Successful login
         setLoginSuccess(true);
+        const user_id = response.data.user.id
+        const username = response.data.user.first_name + " " + response.data.user.last_name;
+        localStorage.setItem("user_id", user_id)
+        localStorage.setItem("username", username)
+
+        toast.success("Logged in successfully.", {
+          position: toast.POSITION.TOP_RIGHT,
+          hideProgressBar: true,
+          theme: "colored",
+        });
 
         // Reset the success state after a delay (e.g., 3 seconds)
         setTimeout(() => {
           setLoginSuccess(false);
         }, 3000);
-        navigate('/dashboard');
+        navigate('/dashboard/default');
       } else {
         console.error('Login failed');
+        toast.error("Login failed. Please try again.", {
+          position: toast.POSITION.TOP_RIGHT,
+          hideProgressBar: true,
+          theme: "colored",
+        });
       }
     } catch (error) {
       console.error('Error:', error);
+      toast.error("Login failed. Please try again.", {
+        position: toast.POSITION.TOP_RIGHT,
+        hideProgressBar: true,
+        theme: "colored",
+      });
     }
   };
-
-
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -94,7 +113,8 @@ const FirebaseLogin = ({ ...others }) => {
 
   return (
     <>
-      <Grid container direction="column" justifyContent="center" spacing={0} >
+      <ToastContainer></ToastContainer>
+      <Grid container direction="column" justifyContent="center" spacing={0}>
         <Grid item xs={12} spacing={0}>
           <AnimateButton>
             <Button
@@ -155,12 +175,12 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'shivamjain@genzeon.com',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          email: Yup.string().max(255).required('Email/username is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={handleLogin}
@@ -236,16 +256,13 @@ const FirebaseLogin = ({ ...others }) => {
 
             <Box sx={{ mt: 0 }}>
               <AnimateButton>
-                <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button className='sign-in-button' disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign in
                 </Button>
               </AnimateButton>
             </Box>
-
           </form>
         )}
-
-
       </Formik>
       {loginSuccess && (
         <div className="success-popup">

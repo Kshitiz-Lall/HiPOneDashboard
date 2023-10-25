@@ -29,7 +29,7 @@ const other = {
     },
     {
       id: 'generate-readme',
-      title: 'Generate Readme',
+      title: 'Generate ReadMe',
       type: 'item',
       url: "",
       icon: icons.IconBrandChrome,

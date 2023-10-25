@@ -1,33 +1,23 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
 const TestResults = ({ testResultsLists }) => {
   const [tabIndex, setTabIndex] = useState(0);
-  console.log(testResultsLists);
+
   const [testResults, setTestResults] = useState({
-    errors: [
-      'Test if the response is in the correct format (JSON)',
-      'Test if the response time is within defined limits',
-      'Test if response contains expected fields'
-    ],
-    failed_tests: [
-      'Test if the response is in the correct format (JSON)',
-      'Test if the response time is within defined limits',
-      'Test if response contains expected fields'
-    ],
-    success_tests: [
-      'Test if response contains all the expected data',
-      'Test if response status code is correct',
-      'Test if the response is in the correct format (JSON)',
-      'Test if the response time is within defined limits',
-      'Test if response contains expected fields'
-    ],
+    errors: [],
+    failed_tests: [],
+    success_tests: [],
     summary: '5 tests run, 0 failed, 0 errored.'
   });
+  useEffect(() => {
+    setTestResults({ ...testResultsLists });
+  }, []);
   return (
     <div>
-      <h5>{testResults.summary}</h5>
+      <h4>{testResults.success_tests.length + testResults.failed_tests.length} Tests Run, {testResults.success_tests.length} Passed, {testResults.failed_tests.length} Failed, {testResults.errors.length} Errors</h4>
       <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
         <TabList style={tabListStyles}>
           <Tab style={tabStyles}>All</Tab>
@@ -54,7 +44,7 @@ const TestResults = ({ testResultsLists }) => {
               status: 'ERROR',
               content: result,
               key: index,
-              color: '#ff0000'
+              color: '#FF5733'
             }))
           ].map(({ status, content, key, color }) => (
             <div key={key} style={{ display: 'flex', alignItems: 'center', padding: '3px' }}>
@@ -132,7 +122,7 @@ const TestResults = ({ testResultsLists }) => {
                   height: '25px',
                   width: '45px',
                   marginRight: '5px',
-                  backgroundColor: '#ff0000',
+                  backgroundColor: '#FF5733',
                   border: 'none',
                   outline: 'none',
                   fontSize: '10px',

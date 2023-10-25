@@ -7,7 +7,7 @@ import { Radio } from '@mui/material';
 import { padding } from '@mui/system';
 import { Select, FormControl, MenuItem, InputLabel } from '@mui/material';
 
-export function Body({height}) {
+export function Body({ height }) {
   const bodyContent = useSelector((state) => state.automation.bodyContent);
   const [data, setdata] = useState([...bodyContent.fromData]);
   const bodyContentType = useSelector((state) => state.automation.bodyContentType);
@@ -43,7 +43,7 @@ export function Body({height}) {
     newdata[index] = { ...newdata[index], type: type, file: null };
     setdata(newdata);
   };
-  console.log(height)
+
   const handleFileChange = (index, file) => {
     const newdata = [...data];
     newdata[index] = { ...newdata[index], file: file };
@@ -78,11 +78,11 @@ export function Body({height}) {
   useEffect(() => {
     return () => {
       setTimeout(() => {
-        console.log(latestState.current);
+
         dispatch(setBodyContent(latestState.current));
       }, 0);
     };
-  }, [data,rawdata]);
+  }, [data, rawdata]);
 
   useEffect(() => {
     if (data.length === 0) {
@@ -178,10 +178,10 @@ export function Body({height}) {
         )}
       </div>
 
-      {value === 0 && <h3 style={{  height:height, marginTop: '1vh' }}>None</h3>}
+      {value === 0 && <h3 style={{ height: height, marginTop: '1vh' }}>None</h3>}
 
       {value === 1 && (
-        <div style={{ height:height, overflowY: 'scroll', marginTop: '1vh' }}>
+        <div style={{ height: height, overflowY: 'scroll', marginTop: '1vh' }}>
           <table className="key_value_table">
             <thead>
               <tr>
@@ -268,7 +268,7 @@ export function Body({height}) {
       )}
 
       {value === 2 && (
-        <div style={{ height:height, marginTop: '1vh' }}>
+        <div style={{ height: height, marginTop: '1vh' }}>
           <label>
             <textarea
               value={rawdata.data}
@@ -281,7 +281,7 @@ export function Body({height}) {
       )}
 
       {value === 3 && (
-        <div style={{  height:height, marginTop: '5vh' }}>
+        <div style={{ height: height, marginTop: '5vh' }}>
           <label>
             <input onChange={handleChangeBinaryFile} type="file" />
           </label>

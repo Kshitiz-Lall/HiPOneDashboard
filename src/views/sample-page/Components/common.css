@@ -65,17 +65,21 @@
     transform: translateY(-50%);
   }
   .genrate_button {
-    height: 6vh;
-    border-radius: 1vh;
-    border: 1px solid #787878;
+    height: 5vh;
+    width: 22vh;
+    border-radius: 5px;
+    border: none;
     outline: none;
     background-color:#00cca5 ;
     color: #fffbfb;
     font-size: 14px;
+    cursor: pointer;
   }
-  .radio_button{
 
+  .genrate_button:hover {
+    background-color: #80e8cc;
   }
+ 
   .radio_button {
     accent-color: #00cca5;
     border: 1px solid #00cca5;

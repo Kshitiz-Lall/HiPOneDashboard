@@ -1,25 +1,15 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const RadialBarChart = (props) => {
-  let title;
-  let value;
-  let isPercentage = false;
-
-  if (props.visitsData.total_visitors !== undefined) {
-    title = "Total Visitors";
-    value = parseFloat(props.visitsData.total_visitors);
-    isPercentage = true;
-  } else {
-    title = "Visits per day";
-    value = parseFloat(props.visitsData.visits_per_day);
-  }
+const RadialBarChart = () => {
+  const value = parseInt(localStorage.getItem("test_cases"), 10); // Parse as an integer
+  const isPercentage = false; // Set to false to display the value as a number
 
   const chartData = {
-    series: [value], // Multiply by 100 if it's a percentage
+    series: [value],
     options: {
       chart: {
-        background: '#fff',
+        background: 'inherit',
         height: 350,
         type: 'radialBar',
         toolbar: {
@@ -32,7 +22,7 @@ const RadialBarChart = (props) => {
           endAngle: 360,
           hollow: {
             margin: 0,
-            size: '65%',
+            size: '70%',
             background: '#fff',
             image: undefined,
             imageOffsetX: 0,
@@ -61,19 +51,19 @@ const RadialBarChart = (props) => {
           dataLabels: {
             show: true,
             name: {
-              offsetY: -2,
+              offsetY: -6,
               show: true,
               color: '#111',
               fontSize: '10px'
             },
             value: {
-              formatter: function (val) {
-                return isPercentage ? val + '%' : val; // Append '%' for percentages
-              },
               color: '#111',
-              fontSize: '14px',
-              offsetY: 5,
+              fontSize: '24px',
+              offsetY: 12,
               show: true,
+              formatter: function (val) {
+                return isPercentage ? val + '%' : val;
+              }
             }
           }
         }
@@ -94,14 +84,14 @@ const RadialBarChart = (props) => {
       stroke: {
         lineCap: 'round'
       },
-      labels: [title],
-    },
+      labels: ["Total Tests Generated"] // Two separate labels
+    }
   };
 
   return (
     <div id="card">
       <div id="chart">
-        <ReactApexChart options={chartData.options} series={chartData.series} type="radialBar" height={160} />
+        <ReactApexChart options={chartData.options} series={chartData.series} type="radialBar" height={195} />
       </div>
     </div>
   );

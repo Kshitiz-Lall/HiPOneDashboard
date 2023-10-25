@@ -3,8 +3,6 @@ import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 
 const LineChart = (props) => {
-  const user_id = localStorage.getItem("user_id")
-
   const [dashboardChart, setDashboardChart] = useState({
     series: [
       {
@@ -36,7 +34,7 @@ const LineChart = (props) => {
         width: 2
       },
       title: {
-        text: 'Performance Time Chart',
+        text: 'Performance Line Chart',
         align: 'left'
       },
       grid: {
@@ -53,8 +51,8 @@ const LineChart = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const response1 = await axios.post('http://40.90.224.238:8088/dashboardchart', { user_id });
-      const Average_API_Response_Times = response1.data.map((d) => d.Average_API_Response_Time);
+      const response1 = await axios.get('http://127.0.0.1:5000/dashboardchart');
+      const Average_API_Response_Times = response1.data.map((d) => d.Total_API_Tests);
       const Average_Code_Generation_Times = response1.data.map((d) => d.Average_Code_Generation_Time);
       const dates = response1.data.map((d) => d.Day);
 
