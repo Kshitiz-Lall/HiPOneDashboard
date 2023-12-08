@@ -6,7 +6,7 @@ import { ButtonBase } from '@mui/material';
 
 // project imports
 import config from 'config';
-import hipAutomateLogo from "../../../assets/images/icons/HIP Automate Module.png"
+import HipOneLogo from '../../../assets/images/icons/HIP Logo Horizontal.svg';
 import { MENU_OPEN } from 'store/actions';
 
 // ==============================|| MAIN LOGO ||============================== //
@@ -16,7 +16,7 @@ const LogoSection = () => {
   const dispatch = useDispatch();
   return (
     <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      <img src={hipAutomateLogo} alt='' style={{ width: "160px" }} />
+      <img src={HipOneLogo} alt="" style={{ width: '160px' }} />
     </ButtonBase>
   );
 };

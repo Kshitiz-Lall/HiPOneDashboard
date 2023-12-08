@@ -25,7 +25,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MyPopup from '../MyPopup';
 import { useNavigate } from 'react-router';
 import './AuthLogin.css';
-import { toast, ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from 'react-toastify';
 
 const FirebaseRegister = () => {
   const theme = useTheme();
@@ -47,7 +47,7 @@ const FirebaseRegister = () => {
         organization: values.organization
       };
 
-      const response = await axios.post('http://40.90.224.238:8088/signup', JSON.stringify(userData), {
+      const response = await axios.post('https://convwebsite-dev.genzeon.com//signup', JSON.stringify(userData), {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -55,10 +55,11 @@ const FirebaseRegister = () => {
 
       if (response.status === 200) {
         setRegisterSuccess(true);
-        toast.success("User created successfully.", {
-          position: toast.POSITION.TOP_RIGHT,
+        toast.success('User created successfully.', {
+          position: toast.POSITION.TOP_RIGHT, // or 'top-right'
+          autoClose: 3000, // Automatically close the toast after 3 seconds
           hideProgressBar: true,
-          theme: "colored",
+          theme: 'colored'
         });
 
         setTimeout(() => {
@@ -67,18 +68,20 @@ const FirebaseRegister = () => {
         navigate('/login');
       } else {
         console.error('Registration failed');
-        toast.error("Failed to create new user.", {
-          position: toast.POSITION.TOP_RIGHT,
+        toast.error('Failed to create a new user.', {
+          position: toast.POSITION.TOP_RIGHT, // or 'top-right'
+          autoClose: 3000,
           hideProgressBar: true,
-          theme: "colored",
+          theme: 'colored'
         });
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error("Failed to create new user.", {
-        position: toast.POSITION.TOP_RIGHT,
+      toast.error('Failed to create a new user.', {
+        position: toast.POSITION.TOP_RIGHT, // or 'top-right'
+        autoClose: 3000,
         hideProgressBar: true,
-        theme: "colored",
+        theme: 'colored'
       });
     }
   };
@@ -94,10 +97,9 @@ const FirebaseRegister = () => {
 
   return (
     <>
-      <ToastContainer></ToastContainer>
       <Grid container direction="column" justifyContent="center" spacing={0}>
         <Grid item xs={12} spacing={0}>
-          <Button
+          {/* <Button
             disableElevation
             fullWidth
             size="large"
@@ -109,10 +111,10 @@ const FirebaseRegister = () => {
             }}
           >
             Sign up with Google
-          </Button>
+          </Button> */}
         </Grid>
         <Grid item xs={12} spacing={0}>
-          <Box
+          {/* <Box
             sx={{
               alignItems: 'center',
               display: 'flex'
@@ -139,7 +141,7 @@ const FirebaseRegister = () => {
             </Button>
 
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-          </Box>
+          </Box> */}
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mt: -1, mb: 0 }}>
@@ -290,18 +292,18 @@ const FirebaseRegister = () => {
               </Box>
             )}
 
-            <Button className='sign-in-button' disableElevation fullWidth size="large" type="submit" variant="contained" color="primary">
+            <Button className="sign-in-button" disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
               Sign up
             </Button>
           </form>
         )}
       </Formik>
 
-      {registerSuccess && (
+      {/* {registerSuccess && (
         <div className="success-popup">
           <MyPopup />
         </div>
-      )}
+      )} */}
     </>
   );
 };

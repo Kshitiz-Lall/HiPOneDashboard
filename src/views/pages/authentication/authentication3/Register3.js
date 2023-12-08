@@ -7,7 +7,6 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 // project imports
 import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
-import Logo from 'ui-component/Logo';
 import AuthRegister from '../auth-forms/AuthRegister';
 import AuthFooter from 'ui-component/cards/AuthFooter';
 
@@ -33,10 +32,16 @@ const Register = () => {
                     </Link>
                   </Grid> */}
                   <Grid item xs={12}>
-                    <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center" sx={{ mt: -2, mb: 0 }}>
+                    <Grid
+                      container
+                      direction={matchDownSM ? 'column-reverse' : 'row'}
+                      alignItems="center"
+                      justifyContent="center"
+                      sx={{ mt: -2, mb: 0 }}
+                    >
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
-                          <Typography color="#00cca5" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                          <Typography color="#0044CC" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                             Sign up
                           </Typography>
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
@@ -64,7 +69,6 @@ const Register = () => {
             </Grid>
           </Grid>
         </Grid>
-
       </Grid>
     </AuthWrapper1>
   );

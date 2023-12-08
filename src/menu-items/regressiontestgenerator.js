@@ -1,33 +1,32 @@
 // assets
-import { IconBrandChrome, IconHelp } from '@tabler/icons';
+import { IconMessage, IconAddressBook } from '@tabler/icons';
 
 // constant
-const icons = { IconBrandChrome, IconHelp };
+const icons = { IconMessage, IconAddressBook };
 
 // ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
 const other = {
   id: 'sample-docs-roadmap',
-  title: "Regression Test Generator",
+  title: 'Details',
   type: 'group',
   children: [
     {
       id: 'regression-test-generator',
-      title: 'Test Cases',
+      title: 'Conversational Details',
       type: 'item',
-      url: '/sample-page',
-      icon: icons.IconBrandChrome,
+      url: '/conversational-page',
+      icon: icons.IconMessage,
       breadcrumbs: false
     },
-    // {
-    //   id: 'documentation',
-    //   title: 'Documentation',
-    //   type: 'item',
-    //   url: 'https://codedthemes.gitbook.io/berry/',
-    //   icon: icons.IconHelp,
-    //   external: true,
-    //   target: true
-    // }
+    {
+      id: 'contact-us-page',
+      title: 'Contact Us Details',
+      type: 'item',
+      url: '/contact-us-page',
+      icon: icons.IconAddressBook,
+      breadcrumbs: false
+    }
   ]
 };
 

@@ -46,10 +46,10 @@ const Header = ({ handleLeftDrawerToggle }) => {
               ...theme.typography.commonAvatar,
               ...theme.typography.mediumAvatar,
               transition: 'all .2s ease-in-out',
-              background: "#00cca5",
+              background: '#0044CC',
               color: theme.palette.secondary.light,
               '&:hover': {
-                background: "#80e8cc",
+                background: '#0044CC',
                 color: theme.palette.secondary.light
               }
             }}
@@ -64,19 +64,19 @@ const Header = ({ handleLeftDrawerToggle }) => {
         <WelcomeMsg />
       </Box>
       <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
-        <Dropdown />
+        {/* <Dropdown /> */}
       </Box>
       <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
-        <Datepicker />
+        {/* <Datepicker /> */}
       </Box>
       <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
-        <SearchIcon />
+        {/* <SearchIcon /> */}
       </Box>
       <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
-        <MailOutlineIcon />
+        {/* <MailOutlineIcon /> */}
       </Box>
       <Box component="span" sx={{ display: { xs: 'none', md: 'block' }, flexGrow: 0.5 }}>
-        <NotificationsNoneIcon />
+        {/* <NotificationsNoneIcon /> */}
       </Box>
       <ProfileSection />
     </>

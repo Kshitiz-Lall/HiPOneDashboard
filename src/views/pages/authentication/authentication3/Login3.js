@@ -15,7 +15,9 @@ const Login = () => {
       <Grid container direction="column" justifyContent="flex-end" sx={{ minHeight: '100vh', mt: -2 }}>
         <Grid item xs={12}>
           <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
-            <Grid item sx={{ m: 0 }}> {/* Removed margin */}
+            <Grid item sx={{ m: 0 }}>
+              {' '}
+              {/* Removed margin */}
               <AuthCardWrapper>
                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                   {/* <Grid item sx={{ mb: 0 }}> // Removed margin */}
@@ -27,7 +29,7 @@ const Login = () => {
                     <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                       <Grid item>
                         <Stack alignItems="center" justifyContent="center" spacing={1}>
-                          <Typography color="#00cca5" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                          <Typography color="#0044CC" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                             Hi, Welcome Back
                           </Typography>
                           <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
@@ -55,9 +57,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </Grid>
-
       </Grid>
-
     </AuthWrapper1>
   );
 };

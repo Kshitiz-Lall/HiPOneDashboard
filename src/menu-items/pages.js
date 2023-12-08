@@ -1,24 +1,33 @@
-import { IconBrandChrome, IconHelp } from '@tabler/icons';
+// assets
+import { IconMessage, IconAddressBook } from '@tabler/icons';
 
 // constant
-const icons = { IconBrandChrome, IconHelp };
+const icons = { IconMessage, IconAddressBook };
 
-// ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
+// ==============================|| SAMPLE PAGE & DOCUMENTATION MENU ITEMS ||============================== //
 
-const pages = {
-  id: 'pages',
-  title: "Pages",
+const other = {
+  id: 'detail-page',
+  title: 'Details',
   type: 'group',
   children: [
     {
-      id: 'user-pages',
-      title: 'User Pages',
+      id: 'conversation-page',
+      title: 'Conversational Details',
       type: 'item',
-      url: '',
-      icon: icons.IconBrandChrome,
+      url: '/conversational-page',
+      icon: icons.IconMessage,
       breadcrumbs: false
     },
+    {
+      id: 'contact-us-page',
+      title: 'Contact Us Details',
+      type: 'item',
+      url: '/contact-us-page',
+      icon: icons.IconAddressBook,
+      breadcrumbs: false
+    }
   ]
 };
 
-export default pages;
+export default other;

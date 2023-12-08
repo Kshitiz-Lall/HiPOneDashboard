@@ -4,6 +4,6 @@
     "module": "commonjs",
     "baseUrl": "src"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/menu-items/regressiontestgenerator.js"],
   "exclude": ["node_modules"]
 }

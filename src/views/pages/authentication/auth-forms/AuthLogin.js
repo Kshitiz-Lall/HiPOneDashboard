@@ -1,12 +1,7 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
   Checkbox,
-  Divider,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -19,10 +14,14 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 // third party
-import * as Yup from 'yup';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
@@ -32,11 +31,9 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import Google from 'assets/images/icons/social-google.svg';
 import { useNavigate } from 'react-router';
-import MyPopup from '../MyPopup';
+import { toast } from 'react-toastify';
 import './AuthLogin.css';
-import { toast, ToastContainer } from "react-toastify";
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -63,41 +60,42 @@ const FirebaseLogin = ({ ...others }) => {
       };
 
       // Now you can use 'userData' to send a POST request
-      const response = await axios.post('http://40.90.224.238:8088/signin', userData);
+      const response = await axios.post('https://convwebsite-dev.genzeon.com//signin', userData);
 
       if (response.status === 200) {
         // Successful login
         setLoginSuccess(true);
-        const user_id = response.data.user.id
-        const username = response.data.user.first_name + " " + response.data.user.last_name;
-        localStorage.setItem("user_id", user_id)
-        localStorage.setItem("username", username)
+        localStorage.setItem('isLoggedIn', true);
+        const user_id = response.data.user.id;
+        const username = response.data.user.first_name + ' ' + response.data.user.last_name;
+        localStorage.setItem('user_id', user_id);
+        localStorage.setItem('username', username);
 
-        toast.success("Logged in successfully.", {
+        toast.success('Logged in successfully.', {
           position: toast.POSITION.TOP_RIGHT,
           hideProgressBar: true,
-          theme: "colored",
+          theme: 'colored'
         });
 
         // Reset the success state after a delay (e.g., 3 seconds)
         setTimeout(() => {
           setLoginSuccess(false);
         }, 3000);
-        navigate('/dashboard/default');
+        navigate('/dashboard');
       } else {
         console.error('Login failed');
-        toast.error("Login failed. Please try again.", {
+        toast.error('Login failed. Please try again.', {
           position: toast.POSITION.TOP_RIGHT,
           hideProgressBar: true,
-          theme: "colored",
+          theme: 'colored'
         });
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error("Login failed. Please try again.", {
+      toast.error('Login failed. Please try again.', {
         position: toast.POSITION.TOP_RIGHT,
         hideProgressBar: true,
-        theme: "colored",
+        theme: 'colored'
       });
     }
   };
@@ -113,10 +111,9 @@ const FirebaseLogin = ({ ...others }) => {
 
   return (
     <>
-      <ToastContainer></ToastContainer>
       <Grid container direction="column" justifyContent="center" spacing={0}>
         <Grid item xs={12} spacing={0}>
-          <AnimateButton>
+          {/* <AnimateButton>
             <Button
               disableElevation
               fullWidth
@@ -134,10 +131,10 @@ const FirebaseLogin = ({ ...others }) => {
               </Box>
               Sign in with Google
             </Button>
-          </AnimateButton>
+          </AnimateButton> */}
         </Grid>
         <Grid item xs={12} spacing={0}>
-          <Box
+          {/* <Box
             sx={{
               alignItems: 'center',
               display: 'flex'
@@ -164,7 +161,7 @@ const FirebaseLogin = ({ ...others }) => {
             </Button>
 
             <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-          </Box>
+          </Box> */}
         </Grid>
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mt: -1, mb: 0 }}>
@@ -256,7 +253,15 @@ const FirebaseLogin = ({ ...others }) => {
 
             <Box sx={{ mt: 0 }}>
               <AnimateButton>
-                <Button className='sign-in-button' disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button
+                  className="sign-in-button"
+                  disableElevation
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                >
                   Sign in
                 </Button>
               </AnimateButton>
@@ -264,11 +269,11 @@ const FirebaseLogin = ({ ...others }) => {
           </form>
         )}
       </Formik>
-      {loginSuccess && (
+      {/* {loginSuccess && (
         <div className="success-popup">
           <MyPopup />
         </div>
-      )}
+      )} */}
     </>
   );
 };

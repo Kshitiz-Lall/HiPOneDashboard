@@ -10,28 +10,26 @@ import Routes from 'routes';
 import themes from 'themes';
 import Login from 'views/pages/authentication/authentication3/Login3';
 
-import Dashboard from 'views/dashboard/Default';
 import MainLayout from 'layout/MainLayout';
 import { Navigate, Outlet, Route } from 'react-router';
+import Dashboard from 'views/Default';
 import Register from 'views/pages/authentication/authentication3/Register3';
-
-// project imports
 
 // ==============================|| APP ||============================== //
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
-  const isAuth = true;
+  const isAuth = localStorage.getItem('isLoggedIn');
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes(customization)}>
         <Routes>
           <Route element={!isAuth ? <Outlet /> : <Navigate to={'/'} />}>
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Route>
           <Route element={<MainLayout />}>
-            <Route path='/dashboard/default' element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
           </Route>
         </Routes>
       </ThemeProvider>

@@ -10,7 +10,6 @@ import {
   Chip,
   ClickAwayListener,
   Divider,
-  Grid,
   List,
   ListItemButton,
   ListItemIcon,
@@ -31,21 +30,21 @@ import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 
 // assets
-import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
+import { IconLogout, IconSettings } from '@tabler/icons';
 
 // ==============================|| PROFILE MENU ||============================== //
 const ProfileSection = () => {
-  const username = localStorage.getItem("username");
+  const username = localStorage.getItem('username');
 
   const currentHour = new Date().getHours();
 
   let greeting;
   if (currentHour >= 5 && currentHour < 12) {
-    greeting = "Good Morning";
+    greeting = 'Good Morning';
   } else if (currentHour >= 12 && currentHour < 17) {
-    greeting = "Good Afternoon";
+    greeting = 'Good Afternoon';
   } else {
-    greeting = "Good Evening";
+    greeting = 'Good Evening';
   }
 
   const theme = useTheme();
@@ -63,7 +62,7 @@ const ProfileSection = () => {
   const anchorRef = useRef(null);
   const handleLogout = async () => {
     localStorage.clear();
-    navigate("/login")
+    navigate('/login');
   };
 
   const handleClose = (event) => {
@@ -169,16 +168,12 @@ const ProfileSection = () => {
                           {username}
                         </Typography>
                       </Stack>
-
                     </Stack>
 
                     <Divider />
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 2 }}>
-
-
-                      <Divider />
+                    <Box sx={{ p: 1 }}>
                       <List
                         component="nav"
                         sx={{
@@ -204,34 +199,6 @@ const ProfileSection = () => {
                             <IconSettings stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                        </ListItemButton>
-                        <ListItemButton
-                          sx={{ borderRadius: `${customization.borderRadius}px` }}
-                          selected={selectedIndex === 1}
-                          onClick={(event) => handleListItemClick(event, 1, '#')}
-                        >
-                          <ListItemIcon>
-                            <IconUser stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Grid container spacing={1} justifyContent="space-between">
-                                <Grid item>
-                                  <Typography variant="body2">Social Profile</Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Chip
-                                    label="02"
-                                    size="small"
-                                    sx={{
-                                      bgcolor: theme.palette.warning.dark,
-                                      color: theme.palette.background.default
-                                    }}
-                                  />
-                                </Grid>
-                              </Grid>
-                            }
-                          />
                         </ListItemButton>
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
