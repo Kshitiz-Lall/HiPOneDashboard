@@ -1,10 +1,10 @@
 import dashboard from './dashboard';
-import regressiontestgenerator from './regressiontestgenerator';
+import details from './details';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard, regressiontestgenerator]
+  items: [dashboard, details]
 };
 
 export default menuItems;

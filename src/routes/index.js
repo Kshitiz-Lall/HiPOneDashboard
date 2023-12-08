@@ -7,15 +7,9 @@ import Loadable from 'ui-component/Loadable';
 import Login from 'views/pages/authentication/authentication3/Login3';
 import Register from 'views/pages/authentication/authentication3/Register3';
 const Dashboard = Loadable(lazy(() => import('views/Default')));
-const ConversationalPage = Loadable(lazy(() => import('views/conversational-page')));
-const ContactUsPage = Loadable(lazy(() => import('views/contact-us-page')));
-const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
-const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
-const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
+const ConversationalPage = Loadable(lazy(() => import('views/Default/ConversationTable')));
+const ContactUsPage = Loadable(lazy(() => import('views/Default/ContactUsTable')));
+const ApiStatusPage = Loadable(lazy(() => import('views/Default/APIStatusTable')));
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
@@ -29,6 +23,7 @@ export default function ThemeRoutes() {
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'conversational-page', element: <ConversationalPage /> },
         { path: 'contact-us-page', element: <ContactUsPage /> },
+        // { path: 'api-status-page', element: <ApiStatusPage /> },
         { path: '', element: <Dashboard /> }
       ]
     },

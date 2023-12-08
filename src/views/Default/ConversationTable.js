@@ -1,7 +1,7 @@
-import { Box, Typography, CircularProgress } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getConversationData } from 'store/dashboardSlice';
 
 const titleStyle = {
   fontSize: '1.5rem',
@@ -10,8 +10,8 @@ const titleStyle = {
 };
 
 export default function ConversationTable() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const data = useSelector(getConversationData);
+  console.log(data);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -54,40 +54,19 @@ export default function ConversationTable() {
     }
   ];
 
-  useEffect(() => {
-    axios
-      .get(`https://convwebsite-dev.genzeon.com/get_dashboard_data`)
-      .then((response) => {
-        const rows = response.data.data.map((item, index) => ({
-          ...item,
-          id: index.toString()
-        }));
-        setData(rows);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data from the backend:', error);
-        setLoading(false);
-      });
-  }, []);
-
   return (
     <>
       <Typography variant="h5" style={titleStyle}>
         Conversation Details
       </Typography>
       <div className="table-page">
-        {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-            <CircularProgress />
-          </Box>
-        ) : (
+        {
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ height: '100%', width: '100%' }}>
               <DataGrid rows={data} columns={columns} pageSize={7} checkboxSelection disableRowSelectionOnClick />
             </Box>
           </Box>
-        )}
+        }
       </div>
     </>
   );

@@ -83,7 +83,7 @@ const RadialBarChart = ({ totalQueCount, Positive_Count, Negative_Count }) => {
       stroke: {
         lineCap: 'round'
       },
-      labels: ['All Generated Response'] // Two separate labels
+      labels: ['Total Response'] // Two separate labels
     }
   };
 

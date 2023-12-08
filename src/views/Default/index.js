@@ -16,6 +16,7 @@ import ContactUsTable from './ContactUsTable';
 import ConversationTable from './ConversationTable';
 import MultiLineChart from './MultiLineChart';
 import RadialBarChart from './RadialBarChart';
+import APIStatusTable from 'views/Default/APIStatusTable';
 const Theme = createTheme({
   palette: {
     primary: {
@@ -67,6 +68,7 @@ const Dashboard = () => {
       .get('https://convwebsite-dev.genzeon.com/send_info_dashboard')
       .then((response) => {
         const data = response.data;
+
         setDashboardData(data);
       })
       .catch((error) => {
@@ -87,6 +89,7 @@ const Dashboard = () => {
                 <Tab label="Overview" {...a11yProps(0)} />
                 <Tab label="Conversation Details" {...a11yProps(1)} />
                 <Tab label="Contact us Details" {...a11yProps(2)} />
+                {/* <Tab label="API Status" {...a11yProps(3)} /> */}
               </Tabs>
             </ThemeProvider>
             <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
@@ -242,6 +245,9 @@ const Dashboard = () => {
 
           <CustomTabPanel value={value} index={2}>
             <ContactUsTable />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={3}>
+            <APIStatusTable />
           </CustomTabPanel>
         </Box>
       </Grid>

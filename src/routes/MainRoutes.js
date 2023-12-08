@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
+import APIStatusTable from 'views/api-status-page';
 
 // dashboard routing
 const Dashboard = Loadable(lazy(() => import('views/Default')));
@@ -74,13 +75,17 @@ const MainRoutes = {
       ]
     },
     {
-      path: 'conversational-page',
+      path: 'conversational',
       element: <ConversationalPage />
     },
     {
       path: 'contact-us-page',
       element: <ContactUsPage />
     }
+    // {
+    //   path: 'api-status-page',
+    //   element: <APIStatusTable />
+    // }
   ]
 };
 
