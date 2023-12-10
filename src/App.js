@@ -32,7 +32,6 @@ const App = () => {
           ...item,
           id: index.toString()
         }));
-        console.log(rows);
         dispatch(setConversationData(rows));
       })
       .catch((error) => {
@@ -49,7 +48,6 @@ const App = () => {
           id: index.toString()
         }));
         rows.sort((a, b) => b.id - a.id);
-        console.log(rows);
         dispatch(setContactUsData(rows));
       })
       .catch((error) => {

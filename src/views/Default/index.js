@@ -16,7 +16,7 @@ import ContactUsTable from './ContactUsTable';
 import ConversationTable from './ConversationTable';
 import MultiLineChart from './MultiLineChart';
 import RadialBarChart from './RadialBarChart';
-import APIStatusTable from 'views/Default/APIStatusTable';
+import APIStatus from 'views/Default/APIStatus';
 const Theme = createTheme({
   palette: {
     primary: {
@@ -89,7 +89,7 @@ const Dashboard = () => {
                 <Tab label="Overview" {...a11yProps(0)} />
                 <Tab label="Conversation Details" {...a11yProps(1)} />
                 <Tab label="Contact us Details" {...a11yProps(2)} />
-                {/* <Tab label="API Status" {...a11yProps(3)} /> */}
+                <Tab label="API Status" {...a11yProps(3)} />
               </Tabs>
             </ThemeProvider>
             <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
@@ -247,7 +247,7 @@ const Dashboard = () => {
             <ContactUsTable />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-            <APIStatusTable />
+            <APIStatus />
           </CustomTabPanel>
         </Box>
       </Grid>

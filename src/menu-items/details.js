@@ -26,15 +26,15 @@ const other = {
       url: '/contact-us-page',
       icon: icons.IconAddressBook,
       breadcrumbs: false
+    },
+    {
+      id: 'api-status',
+      title: 'API Status Details',
+      type: 'item',
+      url: '/api-status-page',
+      icon: ApiIcon,
+      breadcrumbs: false
     }
-    // {
-    //   id: 'api-status',
-    //   title: 'API Status Details',
-    //   type: 'item',
-    //   url: '/api-status-page',
-    //   icon: ApiIcon,
-    //   breadcrumbs: false
-    // }
   ]
 };
 

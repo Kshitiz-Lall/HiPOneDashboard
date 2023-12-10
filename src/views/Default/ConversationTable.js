@@ -11,7 +11,6 @@ const titleStyle = {
 
 export default function ConversationTable() {
   const data = useSelector(getConversationData);
-  console.log(data);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },

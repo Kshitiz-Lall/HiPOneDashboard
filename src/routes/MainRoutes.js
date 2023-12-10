@@ -81,11 +81,11 @@ const MainRoutes = {
     {
       path: 'contact-us-page',
       element: <ContactUsPage />
+    },
+    {
+      path: 'api-status-page',
+      element: <APIStatusTable />
     }
-    // {
-    //   path: 'api-status-page',
-    //   element: <APIStatusTable />
-    // }
   ]
 };
 

@@ -11,7 +11,6 @@ const titleStyle = {
 
 export default function ContactUsTable() {
   const data = useSelector(getContactUsData);
-  console.log('constact us', data);
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 90 },

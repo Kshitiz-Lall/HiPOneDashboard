@@ -9,7 +9,7 @@ import Register from 'views/pages/authentication/authentication3/Register3';
 const Dashboard = Loadable(lazy(() => import('views/Default')));
 const ConversationalPage = Loadable(lazy(() => import('views/Default/ConversationTable')));
 const ContactUsPage = Loadable(lazy(() => import('views/Default/ContactUsTable')));
-const ApiStatusPage = Loadable(lazy(() => import('views/Default/APIStatusTable')));
+const ApiStatusPage = Loadable(lazy(() => import('views/Default/APIStatus')));
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
@@ -23,7 +23,7 @@ export default function ThemeRoutes() {
         { path: 'dashboard', element: <Dashboard /> },
         { path: 'conversational-page', element: <ConversationalPage /> },
         { path: 'contact-us-page', element: <ContactUsPage /> },
-        // { path: 'api-status-page', element: <ApiStatusPage /> },
+        { path: 'api-status-page', element: <ApiStatusPage /> },
         { path: '', element: <Dashboard /> }
       ]
     },
