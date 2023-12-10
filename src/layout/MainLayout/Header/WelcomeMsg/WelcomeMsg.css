@@ -4,7 +4,7 @@
   font-weight: normal;
   font-size: 28px;
   line-height: 10px;
-  color: #8D8D8D;
+  color: #363636 !important;
 }
 
 .welcome-name {
@@ -29,6 +29,6 @@
   font-weight: normal;
   font-size: 16px;
   line-height: 22px;
-  color: #8D8D8D;
+  color: #363636 !important;
   margin: 0;
 }

@@ -1,72 +1,65 @@
-import { Box, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { useSelector } from 'react-redux';
-import { getConversationData } from 'store/dashboardSlice';
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import AllConversationalResponse from './AllConversationalResponse';
+import AllPositiveResponse from './AllPositiveResponse';
+import AllNegativeResponse from './AllNegetiveResponse';
 
-const titleStyle = {
-  fontSize: '1.5rem',
-  fontWeight: 'bold',
-  color: '#142952'
-};
-
-export default function ConversationTable() {
-  const data = useSelector(getConversationData);
-
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    {
-      field: 'session_id',
-      headerName: 'Session ID',
-      width: 150,
-      editable: false,
-      sortable: true
-    },
-    {
-      field: 'ip_address',
-      headerName: 'IP Address',
-      width: 150,
-      editable: false,
-      sortable: true
-    },
-    {
-      field: 'date',
-      headerName: 'Date',
-      sortable: true,
-      width: 160,
-      editable: false
-    },
-    {
-      field: 'question',
-      headerName: 'Question',
-      width: 160,
-      editable: false
-    },
-    {
-      field: 'answer',
-      headerName: 'Response',
-      width: 350,
-      height: 200
-    },
-    {
-      field: 'feedback',
-      headerName: 'Feedback'
-    }
-  ];
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
 
   return (
-    <>
-      <Typography variant="h5" style={titleStyle}>
-        Conversation Details
-      </Typography>
-      <div className="table-page">
-        {
-          <Box sx={{ display: 'flex' }}>
-            <Box sx={{ height: '100%', width: '100%' }}>
-              <DataGrid rows={data} columns={columns} pageSize={7} checkboxSelection disableRowSelectionOnClick />
-            </Box>
-          </Box>
-        }
-      </div>
-    </>
+    <div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
+  };
+}
+
+export default function BasicTabs() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="All Responses" {...a11yProps(0)} />
+          <Tab label="Positive Responses" {...a11yProps(1)} />
+          <Tab label="Negative Responses" {...a11yProps(2)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
+        <AllConversationalResponse />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={1}>
+        <AllPositiveResponse />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <AllNegativeResponse />
+      </CustomTabPanel>
+    </Box>
   );
 }
