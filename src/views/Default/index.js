@@ -1,6 +1,4 @@
 import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
-import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -11,12 +9,12 @@ import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { gridSpacing } from 'store/constant';
+import APIStatus from 'views/Default/APIStatus';
 import ColumnChart from './ColumnChart';
 import ContactUsTable from './ContactUsTable';
 import ConversationTable from './ConversationTable';
 import MultiLineChart from './MultiLineChart';
 import RadialBarChart from './RadialBarChart';
-import APIStatus from 'views/Default/APIStatus';
 const Theme = createTheme({
   palette: {
     primary: {
@@ -79,6 +77,12 @@ const Dashboard = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const handlePrint = () => {
+    // Add your printing logic here
+    window.print();
+  };
+
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
@@ -105,40 +109,10 @@ const Dashboard = () => {
                     border: '0.5px solid #0000AF'
                   }
                 }}
-              >
-                <ShareIcon fontSize="12px" />
-                &nbsp;Share
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{
-                  marginRight: '20px',
-                  width: '20px',
-                  height: '20px',
-                  color: '#697586',
-                  border: '0.5px solid #99BBFF',
-                  '&:hover': {
-                    border: '0.5px solid #0000AF'
-                  }
-                }}
+                onClick={handlePrint}
               >
                 <PrintIcon fontSize="12px" />
                 &nbsp;Print
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  width: '20px',
-                  height: '20px',
-                  backgroundColor: '#0044CC',
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: '#0000AF'
-                  }
-                }}
-              >
-                <SystemUpdateAltIcon fontSize="12px" />
-                &nbsp;Export
               </Button>
             </div>
           </Box>
@@ -154,7 +128,7 @@ const Dashboard = () => {
                             Response Generated
                           </Typography>
                           <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.Total_Que_Count} duration={5} />
+                            <CountUp end={dashboardData.Total_Que_Count - 1} duration={1} />
                           </Typography>
                         </CardContent>
                       </Card>
@@ -166,7 +140,7 @@ const Dashboard = () => {
                             Positive Response
                           </Typography>
                           <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.Positive_Count} duration={5} />
+                            <CountUp end={dashboardData.Positive_Count} duration={2} />
                           </Typography>
                         </CardContent>
                       </Card>
@@ -178,7 +152,7 @@ const Dashboard = () => {
                             Negative Response
                           </Typography>
                           <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.Negative_Count} duration={5} />
+                            <CountUp end={dashboardData.Negative_Count} duration={2} />
                           </Typography>
                         </CardContent>
                       </Card>
@@ -190,7 +164,7 @@ const Dashboard = () => {
                             Total Questions Dont Know
                           </Typography>
                           <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.count_questions_dont_know} duration={5} />
+                            <CountUp end={dashboardData.count_questions_dont_know} duration={2} />
                           </Typography>
                         </CardContent>
                       </Card>
@@ -202,7 +176,7 @@ const Dashboard = () => {
                             Total Unique Users
                           </Typography>
                           <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.unique_users} duration={5} />
+                            <CountUp end={dashboardData.unique_users} duration={2} />
                           </Typography>
                         </CardContent>
                       </Card>

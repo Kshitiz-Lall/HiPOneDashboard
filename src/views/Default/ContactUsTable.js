@@ -2,12 +2,27 @@ import React, { useState } from 'react';
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getContactUsData } from 'store/dashboardSlice';
+import { styled } from '@mui/system';
+import { TypeAnimation } from 'react-type-animation';
 
 const titleStyle = {
   fontSize: '1.5rem',
   fontWeight: 'bold',
   color: '#142952'
 };
+
+const StyledTableContainer = styled(TableContainer)({
+  borderRadius: '10px',
+  boxShadow: '0px 4px 20px rgba(55, 64, 161, 0.25)',
+  padding: '1rem'
+});
+
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  '& .MuiTableCell-root': {
+    color: theme.palette.primary.main,
+    fontWeight: 'bold'
+  }
+}));
 
 export default function ContactUsTable() {
   const data = useSelector(getContactUsData);
@@ -68,16 +83,18 @@ export default function ContactUsTable() {
   return (
     <>
       <br />
-      <Typography variant="h5" style={titleStyle}>
-        Contact Us Details
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#f5f5f5' }}>
+        <Typography variant="h5" style={titleStyle}>
+          Contact Us Details
+        </Typography>
+      </Box>
       <br />
       <div className="table-page">
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ width: '100%' }}>
-            <TableContainer component={Paper}>
+            <StyledTableContainer component={Paper}>
               <Table>
-                <TableHead>
+                <StyledTableHead>
                   <TableRow>
                     {columns.map((column) => (
                       <TableCell key={column.field} style={{ width: column.width }}>
@@ -85,7 +102,7 @@ export default function ContactUsTable() {
                       </TableCell>
                     ))}
                   </TableRow>
-                </TableHead>
+                </StyledTableHead>
                 <TableBody>
                   {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                     <TableRow key={row.id}>
@@ -96,9 +113,9 @@ export default function ContactUsTable() {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </StyledTableContainer>
             <TablePagination
-              rowsPerPageOptions={[7, 15, 25]}
+              rowsPerPageOptions={[7, 15, 25, 50, 100]}
               component="div"
               count={data.length}
               rowsPerPage={rowsPerPage}

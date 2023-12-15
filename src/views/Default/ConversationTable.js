@@ -7,6 +7,16 @@ import Box from '@mui/material/Box';
 import AllConversationalResponse from './AllConversationalResponse';
 import AllPositiveResponse from './AllPositiveResponse';
 import AllNegativeResponse from './AllNegetiveResponse';
+import { ThemeProvider, createTheme } from '@mui/system';
+import theme from 'themes';
+
+const Theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0044CC'
+    }
+  }
+});
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,11 +55,13 @@ export default function BasicTabs() {
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="All Responses" {...a11yProps(0)} />
-          <Tab label="Positive Responses" {...a11yProps(1)} />
-          <Tab label="Negative Responses" {...a11yProps(2)} />
-        </Tabs>
+        <ThemeProvider theme={theme}>
+          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{ backgroundColor: 'inherit' }}>
+            <Tab label="All Responses" {...a11yProps(0)} />
+            <Tab label="Positive Responses" {...a11yProps(1)} />
+            <Tab label="Negative Responses" {...a11yProps(2)} />
+          </Tabs>
+        </ThemeProvider>
       </Box>
       <CustomTabPanel value={value} index={0}>
         <AllConversationalResponse />

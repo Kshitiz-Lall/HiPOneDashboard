@@ -25,12 +25,13 @@ import { useTheme } from '@mui/material/styles';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import User1 from 'assets/images/users/user.png';
+import User1 from 'assets/images/users/user.jpg';
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons';
+import './ProfileSection.css';
 
 // ==============================|| PROFILE MENU ||============================== //
 const ProfileSection = () => {
@@ -60,6 +61,7 @@ const ProfileSection = () => {
    * anchorRef is used on different componets and specifying one type leads to other components throwing an error
    * */
   const anchorRef = useRef(null);
+
   const handleLogout = async () => {
     localStorage.clear();
     navigate('/login');
@@ -72,14 +74,22 @@ const ProfileSection = () => {
     setOpen(false);
   };
 
-  const handleListItemClick = (event, index, route = '') => {
-    setSelectedIndex(index);
-    handleClose(event);
+  const getUsernameInitials = () => {
+    const username = localStorage.getItem('username') || '';
+    const [firstName, lastName] = username.split(' ');
 
-    if (route && route !== '') {
-      navigate(route);
-    }
+    return `${firstName.charAt(0)}${lastName ? lastName.charAt(0) : ''}`;
   };
+
+  // const handleListItemClick = (event, index, route = '') => {
+  //   setSelectedIndex(index);
+  //   handleClose(event);
+
+  //   if (route && route !== '') {
+  //     navigate(route);
+  //   }
+  // };
+
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -116,18 +126,9 @@ const ProfileSection = () => {
           }
         }}
         icon={
-          <Avatar
-            src={User1}
-            sx={{
-              ...theme.typography.mediumAvatar,
-              margin: '8px 0 8px 8px !important',
-              cursor: 'pointer'
-            }}
-            ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            color="inherit"
-          />
+          <Avatar>
+            <p className="username-text-color">{getUsernameInitials()}</p>
+          </Avatar>
         }
         label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
         variant="outlined"
@@ -135,7 +136,7 @@ const ProfileSection = () => {
         aria-controls={open ? 'menu-list-grow' : undefined}
         aria-haspopup="true"
         onClick={handleToggle}
-        color="primary"
+        color="secondary"
       />
       <Popper
         placement="bottom-end"
@@ -160,7 +161,7 @@ const ProfileSection = () => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
-                  <Box sx={{ p: 2 }}>
+                  <Box sx={{ p: 1 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">{greeting},&nbsp;</Typography>
@@ -173,7 +174,7 @@ const ProfileSection = () => {
                     <Divider />
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 1 }}>
+                    <Box sx={{ p: 0.5 }}>
                       <List
                         component="nav"
                         sx={{
@@ -190,7 +191,7 @@ const ProfileSection = () => {
                           }
                         }}
                       >
-                        <ListItemButton
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
                           onClick={(event) => handleListItemClick(event, 0, '#')}
@@ -199,7 +200,7 @@ const ProfileSection = () => {
                             <IconSettings stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                        </ListItemButton>
+                        </ListItemButton> */}
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}

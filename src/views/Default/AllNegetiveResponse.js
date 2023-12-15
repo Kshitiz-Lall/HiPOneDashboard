@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import DislikeIcon from '@mui/icons-material/ThumbDown';
 import NullIcon from '@mui/icons-material/RemoveOutlined';
 import { getConversationData } from 'store/dashboardSlice';
+import { styled } from '@mui/system';
 
 const titleStyle = {
   fontSize: '1.5rem',
@@ -11,15 +12,26 @@ const titleStyle = {
   color: '#142952'
 };
 
+const StyledTableContainer = styled(TableContainer)({
+  borderRadius: '10px',
+  boxShadow: '0px 4px 20px rgba(55, 64, 161, 0.25)',
+  padding: '1rem'
+});
+
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  '& .MuiTableCell-root': {
+    color: theme.palette.primary.main,
+    fontWeight: 'bold'
+  }
+}));
+
 export default function AllNegativeResponse() {
   const originalData = useSelector(getConversationData);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(7);
 
-  // Sort data based on ID in descending order
   const sortedData = [...originalData].sort((a, b) => b.id - a.id);
 
-  // Filter data to include only rows with false feedback
   const negativeFeedbackData = sortedData.filter((row) => row.feedback === false);
 
   const data = negativeFeedbackData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -43,16 +55,18 @@ export default function AllNegativeResponse() {
 
   return (
     <>
-      <Typography variant="h5" style={titleStyle}>
-        All Negative Responses
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#f5f5f5' }}>
+        <Typography variant="h5" style={titleStyle}>
+          All Negative Responses
+        </Typography>
+      </Box>
       <br />
       <div className="table-page">
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ width: '100%' }}>
-            <TableContainer component={Paper}>
+            <StyledTableContainer component={Paper}>
               <Table>
-                <TableHead>
+                <StyledTableHead>
                   <TableRow>
                     <TableCell>ID</TableCell>
                     <TableCell align="left">Date</TableCell>
@@ -60,7 +74,7 @@ export default function AllNegativeResponse() {
                     <TableCell align="left">Answer</TableCell>
                     <TableCell align="left">Feedback</TableCell>
                   </TableRow>
-                </TableHead>
+                </StyledTableHead>
                 <TableBody>
                   {data.map((row) => (
                     <TableRow key={row.id}>
@@ -73,7 +87,7 @@ export default function AllNegativeResponse() {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </StyledTableContainer>
             <TablePagination
               rowsPerPageOptions={[7, 15, 25, 50, 100]}
               component="div"

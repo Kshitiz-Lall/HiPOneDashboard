@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import NullIcon from '@mui/icons-material/RemoveOutlined';
+import DislikeIcon from '@mui/icons-material/ThumbDown';
+import LikeIcon from '@mui/icons-material/ThumbUp';
 import {
   Box,
   Paper,
@@ -7,32 +10,52 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   TablePagination,
-  Typography,
-  IconButton
+  TableRow,
+  TextField,
+  Typography
 } from '@mui/material';
+import { styled } from '@mui/system';
+import * as React from 'react';
 import { useSelector } from 'react-redux';
+import 'react-toastify/dist/ReactToastify.css';
+import './Common.css';
 import { getConversationData } from 'store/dashboardSlice';
-import LikeIcon from '@mui/icons-material/ThumbUp';
-import DislikeIcon from '@mui/icons-material/ThumbDown';
-import NullIcon from '@mui/icons-material/RemoveOutlined';
 
 const titleStyle = {
   fontSize: '1.5rem',
   fontWeight: 'bold',
-  color: '#142952'
+  color: '#142952',
+  textAlign: 'center'
 };
+
+const StyledTableContainer = styled(TableContainer)({
+  borderRadius: '10px',
+  boxShadow: '0px 4px 20px rgba(55, 64, 161, 0.25)',
+  padding: '1rem',
+  backdropFilter: 'blur(10px)'
+});
+
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  '& .MuiTableCell-root': {
+    color: theme.palette.primary.main,
+    fontWeight: 'bold'
+  }
+}));
 
 export default function AllConversationalResponse() {
   const originalData = useSelector(getConversationData);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(7);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(7);
+  const [searchTerm, setSearchTerm] = React.useState('');
 
-  // Sort data based on ID in descending order
   const sortedData = [...originalData].sort((a, b) => b.id - a.id);
 
-  const data = sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const filteredData = sortedData.filter((row) =>
+    Object.values(row).some((value) => value.toString().toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const data = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -40,6 +63,11 @@ export default function AllConversationalResponse() {
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
     setPage(0);
   };
 
@@ -55,16 +83,19 @@ export default function AllConversationalResponse() {
 
   return (
     <>
-      <Typography variant="h5" style={titleStyle}>
-        Conversation Details
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#f5f5f5' }}>
+        <Typography variant="h5" style={titleStyle}>
+          Conversation Details
+        </Typography>
+      </Box>
+
       <br />
       <div className="table-page">
         <Box sx={{ display: 'flex' }}>
           <Box sx={{ width: '100%' }}>
-            <TableContainer component={Paper}>
+            <StyledTableContainer component={Paper}>
               <Table>
-                <TableHead>
+                <StyledTableHead>
                   <TableRow>
                     <TableCell>ID</TableCell>
                     <TableCell align="left">Session ID</TableCell>
@@ -74,26 +105,28 @@ export default function AllConversationalResponse() {
                     <TableCell align="left">Answer</TableCell>
                     <TableCell align="left">Feedback</TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
+                </StyledTableHead>
+                <TransitionGroup component={TableBody}>
                   {data.map((row) => (
-                    <TableRow key={row.id}>
-                      <TableCell>{row.id}</TableCell>
-                      <TableCell align="left">{row.session_id}</TableCell>
-                      <TableCell align="left">{row.ip_address}</TableCell>
-                      <TableCell align="left">{row.date}</TableCell>
-                      <TableCell align="left">{row.question}</TableCell>
-                      <TableCell align="left">{row.answer}</TableCell>
-                      <TableCell align="left">{renderFeedbackIcon(row.feedback)}</TableCell>
-                    </TableRow>
+                    <CSSTransition key={row.id} timeout={500} classNames="item">
+                      <TableRow>
+                        <TableCell>{row.id}</TableCell>
+                        <TableCell align="left">{row.session_id}</TableCell>
+                        <TableCell align="left">{row.ip_address}</TableCell>
+                        <TableCell align="left">{row.date}</TableCell>
+                        <TableCell align="left">{row.question}</TableCell>
+                        <TableCell align="left">{row.answer}</TableCell>
+                        <TableCell align="left">{renderFeedbackIcon(row.feedback)}</TableCell>
+                      </TableRow>
+                    </CSSTransition>
                   ))}
-                </TableBody>
+                </TransitionGroup>
               </Table>
-            </TableContainer>
+            </StyledTableContainer>
             <TablePagination
               rowsPerPageOptions={[7, 15, 25, 50, 100]}
               component="div"
-              count={sortedData.length}
+              count={filteredData.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
