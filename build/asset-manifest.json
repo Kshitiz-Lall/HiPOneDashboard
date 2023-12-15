@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/HiPOneDashboard/static/css/main.e3d90815.css",
+    "main.js": "/HiPOneDashboard/static/js/main.d4c4d556.js",
+    "static/media/HIP Logo Horizontal.svg": "/HiPOneDashboard/static/media/HIP Logo Horizontal.e7b4c2ea272a6b3455b8bcf2d5d9c379.svg",
+    "index.html": "/HiPOneDashboard/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.e3d90815.css",
+    "static/js/main.d4c4d556.js"
+  ]
+}
