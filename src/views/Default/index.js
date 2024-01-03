@@ -1,5 +1,5 @@
 import PrintIcon from '@mui/icons-material/Print';
-import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
+import { Button, Card, CardContent, Grid, Skeleton, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -15,6 +15,8 @@ import ContactUsTable from './ContactUsTable';
 import ConversationTable from './ConversationTable';
 import MultiLineChart from './MultiLineChart';
 import RadialBarChart from './RadialBarChart';
+import Loading from './Loading';
+
 const Theme = createTheme({
   palette: {
     primary: {
@@ -59,18 +61,50 @@ const Dashboard = () => {
     count_questions_dont_know: 0,
     unique_users: 0
   });
+  const [loading, setLoading] = useState(true);
+
+  const cardData = [
+    {
+      title: 'Response Generated',
+      count: dashboardData.Total_Que_Count - 1,
+      duration: 1
+    },
+    {
+      title: 'Positive Response',
+      count: dashboardData.Positive_Count,
+      duration: 2
+    },
+    {
+      title: 'Negative Response',
+      count: dashboardData.Negative_Count,
+      duration: 2
+    },
+    {
+      title: 'Total Questions Dont Know',
+      count: dashboardData.count_questions_dont_know,
+      duration: 2
+    },
+    {
+      title: 'Total Unique Users',
+      count: dashboardData.unique_users,
+      duration: 2
+    }
+  ];
 
   useEffect(() => {
-    // Fetch data when the component mounts
+    setLoading(true);
+
     axios
       .get('https://convwebsite-dev.genzeon.com/send_info_dashboard')
       .then((response) => {
         const data = response.data;
 
         setDashboardData(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }, []);
 
@@ -79,7 +113,6 @@ const Dashboard = () => {
   };
 
   const handlePrint = () => {
-    // Add your printing logic here
     window.print();
   };
 
@@ -117,79 +150,35 @@ const Dashboard = () => {
             </div>
           </Box>
           <CustomTabPanel value={value} index={0}>
-            <Grid item xs={12}>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <Grid container spacing={1}>
-                    <Grid item lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
-                      <Card sx={{ minWidth: 275, background: 'inherit' }}>
-                        <CardContent>
-                          <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                            Response Generated
-                          </Typography>
-                          <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.Total_Que_Count - 1} duration={1} />
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
-                      <Card sx={{ minWidth: 275, background: 'inherit' }}>
-                        <CardContent>
-                          <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                            Positive Response
-                          </Typography>
-                          <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.Positive_Count} duration={2} />
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
-                      <Card sx={{ minWidth: 275, background: 'inherit' }}>
-                        <CardContent>
-                          <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                            Negative Response
-                          </Typography>
-                          <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.Negative_Count} duration={2} />
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
-                      <Card sx={{ minWidth: 275, background: 'inherit' }}>
-                        <CardContent>
-                          <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                            Total Questions Dont Know
-                          </Typography>
-                          <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.count_questions_dont_know} duration={2} />
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Grid>
-                    <Grid item lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
-                      <Card sx={{ minWidth: 275, background: 'inherit' }}>
-                        <CardContent>
-                          <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                            Total Unique Users
-                          </Typography>
-                          <Typography variant="h3" component="div">
-                            <CountUp end={dashboardData.unique_users} duration={2} />
-                          </Typography>
-                        </CardContent>
-                      </Card>
+            {loading ? (
+              <Loading />
+            ) : (
+              <Grid item xs={12}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <Grid container spacing={1}>
+                      {cardData.map((card, index) => (
+                        <Grid key={index} item lg={2} md={4} sm={6} xs={12} sx={{ marginRight: '30px' }}>
+                          <Card sx={{ minWidth: 275, background: 'inherit' }}>
+                            <CardContent>
+                              <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                {card.title}
+                              </Typography>
+                              <Typography variant="h3" component="div">
+                                <CountUp end={card.count} duration={card.duration} />
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-
+            )}
             <Grid item xs={12}>
               <Grid container spacing={gridSpacing}>
                 <Grid item xs={12} md={10}>
-                  {/* <StackedChart data={dashboardData} /> */}
                   <MultiLineChart />
                 </Grid>
                 <Grid item xs={12} md={2}>
@@ -201,22 +190,18 @@ const Dashboard = () => {
                 </Grid>
               </Grid>
             </Grid>
-
             <Grid item xs={12}>
               <Grid container spacing={gridSpacing}>
                 <Grid item xs={12} md={10}>
-                  {/* <TotalGrowthBarChart isLoading={isLoading} dashboardData={dashboardData} /> */}
                   <ColumnChart />
                 </Grid>
                 <Grid item xs={12} md={2}></Grid>
               </Grid>
             </Grid>
           </CustomTabPanel>
-
           <CustomTabPanel value={value} index={1}>
             <ConversationTable />
           </CustomTabPanel>
-
           <CustomTabPanel value={value} index={2}>
             <ContactUsTable />
           </CustomTabPanel>

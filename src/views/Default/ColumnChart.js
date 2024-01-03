@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
+import { CircularProgress, Paper, Typography } from '@mui/material';
+import Loading from './Loading';
 
 function ColumnChart() {
   const [options, setOptions] = useState({
@@ -21,7 +23,11 @@ function ColumnChart() {
     }
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    setLoading(true);
+
     fetch('https://convwebsite-dev.genzeon.com/get_dashboard_data')
       .then((response) => response.json())
       .then((data) => {
@@ -56,17 +62,15 @@ function ColumnChart() {
             align: 'left'
           }
         });
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }, []);
 
-  return (
-    <div id="chart">
-      <Chart options={options} series={options.series} type="bar" height={350} />
-    </div>
-  );
+  return <div id="chart">{loading ? <Loading /> : <Chart options={options} series={options.series} type="bar" height={350} />}</div>;
 }
 
 export default ColumnChart;

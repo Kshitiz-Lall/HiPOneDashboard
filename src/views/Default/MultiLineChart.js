@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
+import Loading from './Loading';
 
 const LineChart = (props) => {
   const [dashboardChart, setDashboardChart] = useState({
@@ -49,8 +50,11 @@ const LineChart = (props) => {
     }
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     // Fetch data from your API
+    setLoading(true);
     axios
       .get('https://convwebsite-dev.genzeon.com/get_dashboard_data')
       .then((response) => {
@@ -97,10 +101,15 @@ const LineChart = (props) => {
             chart: {
               height: 350,
               type: 'line',
+              background: '#fff',
               zoom: {
-                enabled: false
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
               },
-              background: '#fff'
+              toolbar: {
+                autoSelected: 'zoom'
+              }
             },
             dataLabels: {
               enabled: false
@@ -127,15 +136,17 @@ const LineChart = (props) => {
             }
           }
         });
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
+        setLoading(false);
       });
   }, []);
 
   return (
     <div id="chart">
-      <ReactApexChart options={dashboardChart.options} series={dashboardChart.series} type="line" height={250} />
+      {loading ? <Loading /> : <ReactApexChart options={dashboardChart.options} series={dashboardChart.series} type="line" height={250} />}
     </div>
   );
 };
